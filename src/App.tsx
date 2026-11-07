@@ -29,8 +29,19 @@ export default function App() {
 
   const handleCurrencyChange = (newCurrency: CurrencyCode) => {
     setCurrency(newCurrency);
-    if (newCurrency === 'IDR' && lang === 'EN') {
+    if (newCurrency === 'IDR') {
       setLang('ID');
+    } else if (newCurrency === 'USD') {
+      setLang('EN');
+    }
+  };
+
+  const handleLanguageChange = (newLang: Language) => {
+    setLang(newLang);
+    if (newLang === 'ID') {
+      setCurrency('IDR');
+    } else if (newLang === 'EN') {
+      setCurrency('USD');
     }
   };
 
@@ -52,7 +63,7 @@ export default function App() {
         currency={currency}
         onCurrencyChange={handleCurrencyChange}
         lang={lang}
-        onLanguageChange={setLang}
+        onLanguageChange={handleLanguageChange}
         isDark={isDark}
         onToggleTheme={toggleTheme}
         onBookCommission={() => handleOpenCalculator()}

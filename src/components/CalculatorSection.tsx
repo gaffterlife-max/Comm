@@ -599,15 +599,6 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   <div className="text-2xl sm:text-3xl font-extrabold font-mono dark:text-amber-300 text-amber-900 tabular-nums">
                     {formatCurrency(totalUSD, currency)}
                   </div>
-                  {currency === 'IDR' ? (
-                    <div className="text-[10px] sm:text-[11px] text-stone-500 font-mono">
-                      ≈ ${totalUSD} USD
-                    </div>
-                  ) : (
-                    <div className="text-[10px] sm:text-[11px] text-stone-500 font-mono">
-                      ≈ {formatCurrency(totalUSD, 'IDR')}
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
