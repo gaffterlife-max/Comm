@@ -17,19 +17,19 @@ export const WorkflowTermsSection: React.FC = () => {
   const faqs = [
     {
       q: 'Do I provide finished lineart, or do you draw from scratch?',
-      a: 'Both options are welcome. For Manga Page Coloring, you can provide your high-resolution black & white lineart (PSD, CLIP, or 300+ DPI PNG) and I will handle digital colorization and atmospheric lighting. For Character Illustrations or Covers, I create the entire piece from initial thumbnail sketches to final coloring.',
+      a: 'Both options are welcome. For Manga Page Coloring, i can provide your high-resolution panel. For Illustrations, I create the entire piece from initial thumbnail sketches to final coloring.',
     },
     {
       q: 'What payment methods and currencies are supported?',
-      a: 'International clients can pay in USD ($) via PayPal invoice, Stripe, or Wise. For clients in Indonesia, I accept IDR (Rp) via direct Bank Transfer (BCA, Mandiri) or QRIS. Commissions require a standard 50% deposit before work begins, and the remaining 50% upon final preview approval before releasing uncompressed files.',
+      a: 'International clients can pay in USD ($) via PayPal or Wise. For clients in Indonesia, I accept IDR (Rp) via direct Bank Transfer or QRIS. Commissions require a standard 50% deposit before work begins, and the remaining 50% upon final preview approval before releasing uncompressed files.',
     },
     {
       q: 'What deliverable file formats and resolutions will I receive?',
-      a: 'All completed work is delivered via a shared Google Drive link. You will receive 300 to 600 DPI uncompressed PNG/TIFF master files in RGB (for web/socials) and calibrated CMYK (for physical print). Organized, layered source files (.CLIP or .PSD) are available upon request.',
+      a: 'All completed work is delivered via a shared Google Drive link. You will receive 144 uncompressed PNG in RGB. And also a layered source files (.CLIP) are available upon request.',
     },
     {
       q: 'How are revisions and color adjustments handled?',
-      a: 'Every commission includes 2 dedicated review check-ins: Stage 1 (base color flats and general lighting mood) and Stage 2 (detailed shading and effects polish). Minor hue and lighting shifts before final approval are complimentary.',
+      a: 'Every commission includes 5 revision throughout the work and also dedicated review check-ins: Stage 1 (base color flats and general lighting mood) and Stage 2 (detailed shading and effects polish). Minor hue and lighting shifts before final approval are complimentary.',
     },
   ];
 

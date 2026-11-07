@@ -20,7 +20,7 @@ export const artistProfile: ArtistProfile = {
   experience: '2+ Years Experience',
   turnaroundAverage: '1–2 Business Days',
   avatarImage: '/assets/aistudio/wmm_newss_ccb81ada.png',
-  software: ['Clip Studio Paint EX'],
+  software: ['Clip Studio Paint'],
   hardware: ['HUION H640P'],
   socials: {
     twitter: 'https://x.com/gduckx_',
@@ -329,7 +329,7 @@ export const workflowSteps: WorkflowStep[] = [
     emoji: '💬',
     title: 'Project Inquiry & Brief',
     description:
-      'Choose your preferred service, page count, and describe your concept or attach reference images using the form below.',
+      'Choose your preferred service, page count, and describe your concept or attach reference images using the form above.',
     deliverable: 'Confirmed quote & delivery timeline',
   },
   {
@@ -368,21 +368,22 @@ export const workflowSteps: WorkflowStep[] = [
 
 export const commissionTerms: CommissionTerms = {
   dos: [
-    'Black & white manga pages and comic panels requiring professional colorization',
+    'Black & white manga pages',
     'Original Characters (OCs) with reference pictures or clear visual descriptions',
-    'Action, Fantasy, Romance, Sci-Fi, and Slice of Life manga genres',
+    'Action, Fantasy, Romance, Sci-Fi, Gore (nsfw or full gore) and Slice of Life manga genres',
     'Special effects, lighting passes, armor filigree, and magical weapons',
     'Character interactions, paired poses, and dynamic panel compositions',
   ],
   donts: [
+    'Chibi Art',
     'Explicit NSFW or hateful/offensive content',
     'NFT / Crypto / Web3 projects',
     'AI dataset training, AI model ingestion, or image scraping',
-    'Tracing or modifying other artists’ work without explicit consent',
+    'Tracing or modifying other artists work without explicit consent',
   ],
   paymentRules: [
-    'International clients: PayPal invoice, Stripe, or Wise in USD ($).',
-    'Indonesian clients: Direct Bank Transfer (BCA, Mandiri) or QRIS in IDR (Rp).',
+    'International clients: PayPal invoice or Wise in USD ($).',
+    'Indonesian clients: Direct Bank Transfer or QRIS in IDR (Rp).',
     'Standard 50% deposit upfront before work begins; remaining 50% upon final preview approval.',
     'Rush delivery is available upon request subject to schedule availability.',
   ],
@@ -392,8 +393,8 @@ export const commissionTerms: CommissionTerms = {
     'Significant changes requested after linework or final rendering approval may incur an additional fee.',
   ],
   copyrightRules: [
-    'Personal use: You may freely post the artwork online with credit (@gaffterduck), use it as an avatar, or print it for personal display.',
-    'Commercial licensing: Available if you plan to publish books, sell merchandise, or monetize the illustration.',
+    'Personal use: You may freely post the artwork online, use it as an avatar, or print it for personal display.',
+    'Commercial licensing (! Illustration only !): Available if you plan to publish books, sell merchandise, or monetize the illustration.',
     'The artist reserves the right to display completed work in online portfolios unless an NDA is requested.',
   ],
 };

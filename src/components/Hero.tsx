@@ -29,11 +29,8 @@ export const Hero: React.FC<HeroProps> = ({
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight dark:text-amber-50 text-stone-900 font-display leading-[1.15]">
-            Hi, I&apos;m{' '}
-            <span className="text-amber-600 dark:text-amber-400 underline decoration-amber-400/40 decoration-wavy decoration-2">
-              {artistProfile.name}
-            </span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-wider dark:text-amber-50 text-stone-900 font-display leading-[1.15] uppercase">
+            COMMISSION SHEET
           </h1>
 
           {/* Description */}

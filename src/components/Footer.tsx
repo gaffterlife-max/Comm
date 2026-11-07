@@ -57,11 +57,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-stone-800/60 border border-stone-700/80">
                 <Layers className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>{artistProfile.software.join(' & ')} Digital Suite</span>
-              </div>
-              <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-stone-800/60 border border-stone-700/80">
-                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Calibrated 600 DPI Print Quality</span>
+                <span>{artistProfile.software.join(' & ')} PRO</span>
               </div>
             </div>
           </div>
