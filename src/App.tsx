@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { CalculatorSection } from './components/CalculatorSection';
 import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
@@ -93,6 +94,7 @@ export default function App() {
         lang={lang}
         onClose={() => setOrderModal(null)}
       />
+      <Analytics />
     </div>
   );
 }
