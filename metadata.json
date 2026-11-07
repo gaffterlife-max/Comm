@@ -1,0 +1,6 @@
+{
+  "name": "Commissions · Illustrator & Manga Colorist",
+  "description": "Official commission sheet, instant pricing calculator, and portfolio for digital illustration, manga, and comic colorization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
