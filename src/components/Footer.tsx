@@ -1,8 +1,15 @@
 import React from 'react';
-import { Layers, Mail, Monitor, Sparkles } from 'lucide-react';
+import { Layers, Mail, Monitor } from 'lucide-react';
 import { artistProfile } from '../data/commissionData';
+import { getTranslation } from '../data/translations';
+import { Language } from '../types';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  lang?: Language;
+}
+
+export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
+  const t = getTranslation(lang);
   return (
     <footer className="dark:bg-[#161311] bg-stone-900 border-t dark:border-[#2e2722] border-stone-800 text-stone-400 text-xs transition-colors">
       <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-10 sm:py-16">
@@ -57,7 +64,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-stone-800/60 border border-stone-700/80">
                 <Layers className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>{artistProfile.software.join(' & ')} PRO</span>
+                <span>{artistProfile.software.join(' & ')} PRO ver 4.0</span>
               </div>
             </div>
           </div>

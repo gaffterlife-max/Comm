@@ -17,10 +17,12 @@ import {
   illustrationScopes,
   mangaPanelCategories,
 } from '../data/commissionData';
-import { CurrencyCode } from '../types';
+import { getTranslation } from '../data/translations';
+import { CurrencyCode, Language } from '../types';
 
 interface TiersSectionProps {
   currency: CurrencyCode;
+  lang: Language;
   onSelectTier: (tierId: string) => void;
 }
 
@@ -85,11 +87,14 @@ const illustrationSamples: Record<string, SampleImage[]> = {
 
 export const TiersSection: React.FC<TiersSectionProps> = ({
   currency,
+  lang,
   onSelectTier,
 }) => {
   const [selectedMangaCatId, setSelectedMangaCatId] = useState('full-panel');
   const [selectedIllustrationScopeId, setSelectedIllustrationScopeId] =
     useState('bust');
+
+  const t = getTranslation(lang);
 
   const [mangaSlideIndex, setMangaSlideIndex] = useState(0);
   const [illustrationSlideIndex, setIllustrationSlideIndex] = useState(0);
@@ -187,15 +192,13 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
       <div className="mb-10 sm:mb-14 text-center max-w-2xl mx-auto space-y-2.5 sm:space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-[11px] sm:text-xs font-bold text-amber-900 dark:text-amber-200 shadow-xs">
           <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-          <span>Commission Packages</span>
+          <span>{t.commissionPackagesBadge}</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight dark:text-amber-50 text-stone-900 font-display">
-          Select Your Commission Type
+          {t.selectCommissionType}
         </h2>
         <p className="dark:text-stone-300 text-stone-600 text-xs sm:text-sm sm:text-base leading-relaxed font-normal">
-          Choose between <strong>Manga Coloring</strong> or{' '}
-          <strong>Illustration</strong>. Pick a category below to explore high-res
-          artwork samples and check pricing.
+          {t.selectCommissionTypeSubtitle}
         </p>
       </div>
 
@@ -214,7 +217,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                   {mangaTier.name}
                 </h3>
                 <span className="text-[11px] sm:text-xs font-medium text-amber-700 dark:text-amber-300">
-                  3 Category Options Available
+                  {t.categoryOptionsAvailable}
                 </span>
               </div>
             </div>

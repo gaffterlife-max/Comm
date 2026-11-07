@@ -1,4 +1,5 @@
 export type CurrencyCode = 'USD' | 'IDR';
+export type Language = 'EN' | 'ID';
 
 export interface CurrencyConfig {
   code: CurrencyCode;

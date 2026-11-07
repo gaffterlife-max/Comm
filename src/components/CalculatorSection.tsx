@@ -14,10 +14,12 @@ import {
   illustrationScopes,
   mangaPanelCategories,
 } from '../data/commissionData';
-import { CurrencyCode, OrderInquiry } from '../types';
+import { getTranslation } from '../data/translations';
+import { CurrencyCode, Language, OrderInquiry } from '../types';
 
 interface CalculatorSectionProps {
   currency: CurrencyCode;
+  lang: Language;
   selectedTierId: string;
   onSelectTier: (tierId: string) => void;
   onSubmitSuccess: (order: OrderInquiry) => void;
@@ -25,10 +27,12 @@ interface CalculatorSectionProps {
 
 export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   currency,
+  lang,
   selectedTierId = 'manga-coloring',
   onSelectTier,
   onSubmitSuccess,
 }) => {
+  const t = getTranslation(lang);
   const [activeTierId, setActiveTierId] = useState(
     selectedTierId === 'illustration' ? 'illustration' : 'manga-coloring'
   );
@@ -622,7 +626,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   • High-resolution master files for web display & printing
                 </li>
                 <li>
-                  • Payment options: PayPal, Stripe, Wise (USD) or BCA, QRIS
+                  • Payment options: PayPal, Wise (USD) or Bank Rakyat Indonesia (Brimo), QRIS
                   (IDR)
                 </li>
               </ul>

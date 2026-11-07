@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Menu, Moon, Sparkles, Sun, X } from 'lucide-react';
+import { Globe, Menu, Moon, Sparkles, Sun, X } from 'lucide-react';
 import { artistProfile } from '../data/commissionData';
-import { CurrencyCode } from '../types';
+import { getTranslation } from '../data/translations';
+import { CurrencyCode, Language } from '../types';
 
 interface NavbarProps {
   currency: CurrencyCode;
   onCurrencyChange: (currency: CurrencyCode) => void;
+  lang: Language;
+  onLanguageChange: (lang: Language) => void;
   isDark: boolean;
   onToggleTheme: () => void;
   onBookCommission: () => void;
@@ -14,16 +17,19 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   currency,
   onCurrencyChange,
+  lang,
+  onLanguageChange,
   isDark,
   onToggleTheme,
   onBookCommission,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const t = getTranslation(lang);
 
   const navLinks = [
-    { label: 'Styles & Rates', href: '#tiers' },
-    { label: 'Workflow & Terms', href: '#terms' },
-    { label: 'Price Calculator', href: '#calculator' },
+    { label: t.stylesAndRates, href: '#tiers' },
+    { label: t.workflowAndTerms, href: '#terms' },
+    { label: t.priceCalculator, href: '#calculator' },
   ];
 
   return (
@@ -31,9 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Top Open Status Ticker */}
       <div className="dark:bg-[#26211d] bg-[#f2eae0] border-b dark:border-[#38312b] border-[#e2d7c9] px-2 sm:px-4 py-1 text-center text-[11px] sm:text-xs dark:text-amber-200 text-stone-800 font-medium flex items-center justify-center gap-1.5 sm:gap-2">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span>
-          Commissions are currently <strong>OPEN</strong>
-        </span>
+        <span>{t.commissionsOpen}</span>
         <span
           aria-hidden="true"
           className="text-amber-700/40 dark:text-amber-300/30"
@@ -53,16 +57,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           href="#calculator"
           className="hidden xs:inline underline decoration-amber-500 hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
         >
-          Calculate your rate
+          {t.calculateYourRate}
         </a>
       </div>
 
       {/* Main Nav Bar */}
-      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 sm:gap-6 relative">
         {/* Brand / Logo */}
         <a
           href="#"
-          className="flex items-center gap-2.5 shrink-0 group hover:opacity-90 transition-opacity"
+          className="flex items-center gap-3 shrink-0 group hover:opacity-90 transition-opacity"
           aria-label="Home"
         >
           <div className="relative">
@@ -82,8 +86,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </a>
 
-        {/* Desktop Navigation Links (Centered) */}
-        <nav className="hidden lg:flex items-center justify-center gap-6 text-xs font-semibold dark:text-stone-300 text-stone-700 absolute left-1/2 -translate-x-1/2">
+        {/* Desktop Navigation Links (Shifted Left to avoid controls) */}
+        <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-7 text-xs font-semibold dark:text-stone-300 text-stone-700 absolute left-[35%] xl:left-[42%] -translate-x-1/2">
           {navLinks.map((item) => (
             <a
               key={item.href}
@@ -96,15 +100,45 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right Action Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Language Switcher (EN / ID) */}
+          <div className="flex items-center gap-0.5 dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#38312b] border-[#dfd4c7] rounded-full p-1 text-xs">
+            <button
+              type="button"
+              onClick={() => onLanguageChange('EN')}
+              className={`px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                lang === 'EN'
+                  ? 'bg-amber-400 text-stone-950 shadow-xs'
+                  : 'dark:text-stone-400 text-stone-600 hover:text-stone-900 dark:hover:text-white'
+              }`}
+              title="English"
+            >
+              <span>🇺🇸</span>
+              <span>EN</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onLanguageChange('ID')}
+              className={`px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                lang === 'ID'
+                  ? 'bg-amber-400 text-stone-950 shadow-xs'
+                  : 'dark:text-stone-400 text-stone-600 hover:text-stone-900 dark:hover:text-white'
+              }`}
+              title="Bahasa Indonesia"
+            >
+              <span>🇮🇩</span>
+              <span>ID</span>
+            </button>
+          </div>
+
           {/* Currency Switcher */}
-          <div className="flex items-center gap-0.5 dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#38312b] border-[#dfd4c7] rounded-full p-0.5 text-xs">
+          <div className="flex items-center gap-0.5 dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#38312b] border-[#dfd4c7] rounded-full p-1 text-xs">
             {(['USD', 'IDR'] as CurrencyCode[]).map((cur) => (
               <button
                 key={cur}
                 type="button"
                 onClick={() => onCurrencyChange(cur)}
-                className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full font-mono text-[10px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                className={`px-2.5 sm:px-3 py-1 rounded-full font-mono text-[10px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                   currency === cur
                     ? 'bg-amber-400 text-stone-950 shadow-xs'
                     : 'dark:text-stone-400 text-stone-600 hover:text-stone-900 dark:hover:text-white'
@@ -120,12 +154,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="button"
             onClick={onToggleTheme}
             aria-label="Toggle theme"
-            className="p-1.5 sm:p-2 dark:text-stone-300 text-stone-700 hover:text-amber-600 dark:hover:text-amber-300 dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#38312b] border-[#dfd4c7] rounded-full transition-all cursor-pointer"
+            className="p-2 dark:text-stone-300 text-stone-700 hover:text-amber-600 dark:hover:text-amber-300 dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#38312b] border-[#dfd4c7] rounded-full transition-all cursor-pointer shrink-0"
           >
             {isDark ? (
-              <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+              <Sun className="w-4 h-4 text-amber-400" />
             ) : (
-              <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-stone-700" />
+              <Moon className="w-4 h-4 text-stone-700" />
             )}
           </button>
 
@@ -133,10 +167,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={onBookCommission}
-            className="hidden sm:flex px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold bg-amber-400 hover:bg-amber-300 text-stone-950 rounded-xl transition-all shadow-sm hover:shadow-md hover:scale-102 active:scale-98 whitespace-nowrap shrink-0 items-center gap-1.5 cursor-pointer"
+            className="hidden sm:flex px-4 py-2.5 text-xs font-bold bg-amber-400 hover:bg-amber-300 text-stone-950 rounded-xl transition-all shadow-sm hover:shadow-md hover:scale-102 active:scale-98 whitespace-nowrap shrink-0 items-center gap-1.5 cursor-pointer ml-1"
           >
             <Sparkles className="w-3.5 h-3.5 fill-stone-950" />
-            <span>Order Commission</span>
+            <span>{t.orderCommission}</span>
           </button>
 
           {/* Mobile Menu Toggle */}
@@ -157,7 +191,37 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-b dark:border-[#332c27] border-[#e8dfd5] dark:bg-[#1a1715] bg-[#faf7f2] px-4 pt-3 pb-5 space-y-2 animate-fadeIn">
+        <div className="lg:hidden border-b dark:border-[#332c27] border-[#e8dfd5] dark:bg-[#1a1715] bg-[#faf7f2] px-4 pt-3 pb-5 space-y-3 animate-fadeIn">
+          <div className="flex items-center justify-between pb-2 border-b dark:border-[#332c27] border-[#e8dfd5] text-xs font-semibold">
+            <span className="text-stone-500 flex items-center gap-1">
+              <Globe className="w-3.5 h-3.5" /> Language
+            </span>
+            <div className="flex items-center gap-1 dark:bg-[#25201c] bg-[#ede5db] p-0.5 rounded-lg">
+              <button
+                type="button"
+                onClick={() => onLanguageChange('EN')}
+                className={`px-2.5 py-1 rounded-md text-xs font-bold ${
+                  lang === 'EN'
+                    ? 'bg-amber-400 text-stone-950'
+                    : 'dark:text-stone-400 text-stone-600'
+                }`}
+              >
+                🇺🇸 EN
+              </button>
+              <button
+                type="button"
+                onClick={() => onLanguageChange('ID')}
+                className={`px-2.5 py-1 rounded-md text-xs font-bold ${
+                  lang === 'ID'
+                    ? 'bg-amber-400 text-stone-950'
+                    : 'dark:text-stone-400 text-stone-600'
+                }`}
+              >
+                🇮🇩 ID
+              </button>
+            </div>
+          </div>
+
           <nav className="flex flex-col space-y-1">
             {navLinks.map((item) => (
               <a
@@ -179,7 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="w-full py-2.5 px-4 text-xs font-bold bg-amber-400 text-stone-950 rounded-xl shadow-sm flex items-center justify-center gap-1.5"
               >
                 <Sparkles className="w-3.5 h-3.5 fill-stone-950" />
-                <span>Order Commission</span>
+                <span>{t.orderCommission}</span>
               </button>
             </div>
           </nav>

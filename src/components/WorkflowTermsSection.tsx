@@ -9,8 +9,17 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { commissionTerms, workflowSteps } from '../data/commissionData';
+import { getTranslation } from '../data/translations';
+import { Language } from '../types';
 
-export const WorkflowTermsSection: React.FC = () => {
+interface WorkflowTermsSectionProps {
+  lang?: Language;
+}
+
+export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
+  lang = 'EN',
+}) => {
+  const t = getTranslation(lang);
   const [activeTab, setActiveTab] = useState<'workflow' | 'scope' | 'policies'>('workflow');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 

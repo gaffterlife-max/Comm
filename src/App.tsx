@@ -8,10 +8,11 @@ import { ResetHomeButton } from './components/ResetHomeButton';
 import { SuccessModal } from './components/SuccessModal';
 import { TiersSection } from './components/TiersSection';
 import { WorkflowTermsSection } from './components/WorkflowTermsSection';
-import { CurrencyCode, OrderInquiry } from './types';
+import { CurrencyCode, Language, OrderInquiry } from './types';
 
 export default function App() {
   const [currency, setCurrency] = useState<CurrencyCode>('USD');
+  const [lang, setLang] = useState<Language>('EN');
   const [isDark, setIsDark] = useState(true);
   const [selectedTierId, setSelectedTierId] = useState('full-panel');
   const [orderModal, setOrderModal] = useState<OrderInquiry | null>(null);
@@ -25,6 +26,13 @@ export default function App() {
   }, [isDark]);
 
   const toggleTheme = () => setIsDark((prev) => !prev);
+
+  const handleCurrencyChange = (newCurrency: CurrencyCode) => {
+    setCurrency(newCurrency);
+    if (newCurrency === 'IDR' && lang === 'EN') {
+      setLang('ID');
+    }
+  };
 
   const handleOpenCalculator = (tierId?: string) => {
     if (tierId) setSelectedTierId(tierId);
@@ -42,7 +50,9 @@ export default function App() {
     >
       <Navbar
         currency={currency}
-        onCurrencyChange={setCurrency}
+        onCurrencyChange={handleCurrencyChange}
+        lang={lang}
+        onLanguageChange={setLang}
         isDark={isDark}
         onToggleTheme={toggleTheme}
         onBookCommission={() => handleOpenCalculator()}
@@ -50,6 +60,7 @@ export default function App() {
       <main>
         <Hero
           currency={currency}
+          lang={lang}
           onOpenCalculator={() => handleOpenCalculator()}
           onViewTiers={() => {
             const el = document.getElementById('tiers');
@@ -58,23 +69,30 @@ export default function App() {
         />
         <TiersSection
           currency={currency}
+          lang={lang}
           onSelectTier={(tierId) => setSelectedTierId(tierId)}
         />
         <CalculatorSection
           currency={currency}
+          lang={lang}
           selectedTierId={selectedTierId}
           onSelectTier={setSelectedTierId}
           onSubmitSuccess={(order) => setOrderModal(order)}
         />
-        <WorkflowTermsSection />
+        <WorkflowTermsSection lang={lang} />
       </main>
-      <Footer />
+      <Footer lang={lang} />
       <MobileBottomBar
         currency={currency}
+        lang={lang}
         onOpenCalculator={() => handleOpenCalculator()}
       />
       <ResetHomeButton />
-      <SuccessModal order={orderModal} onClose={() => setOrderModal(null)} />
+      <SuccessModal
+        order={orderModal}
+        lang={lang}
+        onClose={() => setOrderModal(null)}
+      />
     </div>
   );
 }

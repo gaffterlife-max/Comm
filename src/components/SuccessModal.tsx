@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import { Check, CircleCheck, Copy, X } from 'lucide-react';
 import { artistProfile, formatCurrency } from '../data/commissionData';
-import { OrderInquiry } from '../types';
+import { getTranslation } from '../data/translations';
+import { Language, OrderInquiry } from '../types';
 
 interface SuccessModalProps {
   order: OrderInquiry | null;
+  lang?: Language;
   onClose: () => void;
 }
 
-export const SuccessModal: React.FC<SuccessModalProps> = ({ order, onClose }) => {
+export const SuccessModal: React.FC<SuccessModalProps> = ({
+  order,
+  lang = 'EN',
+  onClose,
+}) => {
   const [copied, setCopied] = useState(false);
+  const t = getTranslation(lang);
 
   if (!order) return null;
 

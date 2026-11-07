@@ -1,17 +1,21 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { artistProfile, formatCurrency } from '../data/commissionData';
-import { CurrencyCode } from '../types';
+import { getTranslation } from '../data/translations';
+import { CurrencyCode, Language } from '../types';
 
 interface MobileBottomBarProps {
   currency: CurrencyCode;
+  lang?: Language;
   onOpenCalculator: () => void;
 }
 
 export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
   currency,
+  lang = 'EN',
   onOpenCalculator,
 }) => {
+  const t = getTranslation(lang);
   return (
     <div className="lg:hidden fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-3 right-3 z-40 max-w-md mx-auto">
       <div className="dark:bg-[#201c19]/95 bg-white/95 backdrop-blur-lg border dark:border-[#382f2a] border-amber-300 rounded-2xl px-3.5 py-2.5 flex items-center justify-between gap-2.5 shadow-xl">
@@ -36,7 +40,7 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
           onClick={onOpenCalculator}
           className="py-2 px-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs whitespace-nowrap shrink-0 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
         >
-          <span>Get Quote</span>
+          <span>{t.getQuote}</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
