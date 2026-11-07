@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Main Nav Bar */}
-      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 relative">
         {/* Brand / Logo */}
         <a
           href="#"
@@ -82,8 +82,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </a>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold dark:text-stone-300 text-stone-700">
+        {/* Desktop Navigation Links (Centered) */}
+        <nav className="hidden lg:flex items-center justify-center gap-6 text-xs font-semibold dark:text-stone-300 text-stone-700 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((item) => (
             <a
               key={item.href}

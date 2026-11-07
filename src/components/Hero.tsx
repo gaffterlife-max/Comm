@@ -29,24 +29,10 @@ export const Hero: React.FC<HeroProps> = ({
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-wider dark:text-amber-50 text-stone-900 font-display leading-[1.15] uppercase">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-wider dark:text-amber-50 text-stone-900 font-display leading-tight uppercase text-center">
             COMMISSION SHEET
+              gaffterduck
           </h1>
-
-          {/* Description */}
-          <p className="text-sm sm:text-base lg:text-lg dark:text-stone-300 text-stone-700 leading-relaxed max-w-2xl font-sans">
-            I'm a manga colorist and an illustrator (
-            <a
-              href={artistProfile.socials.twitter}
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold underline hover:text-amber-500 transition-colors"
-            >
-              {artistProfile.handle}
-            </a>
-            ). Coloring your favorite manga panels in my style! And i do Illustration too :D
-            
-          </p>
 
           {/* Centered Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-[11px] sm:text-xs font-bold pt-1">

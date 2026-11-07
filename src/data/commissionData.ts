@@ -421,7 +421,8 @@ export function formatCurrency(
   const config = currencyConfigs[currency] || currencyConfigs.USD;
   const converted = amountUSD * config.rateFromUSD;
   if (currency === 'IDR') {
-    const rounded = Math.round(converted / 1000) * 1000;
+    // Round to the nearest Rp 5.000 for clean, round Indonesian pricing
+    const rounded = Math.round(converted / 5000) * 5000;
     return `${config.symbol}${rounded.toLocaleString('id-ID')}`;
   }
   return `${config.symbol}${converted.toFixed(0)}`;
