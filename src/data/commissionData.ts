@@ -408,12 +408,15 @@ export const currencyConfigs: Record<CurrencyCode, CurrencyConfig> = {
   IDR: {
     code: 'IDR',
     symbol: 'Rp ',
-    rateFromUSD: 16000,
+    rateFromUSD: 13600, // Fixed Indonesian local rate (15% off standard 16,000 rate)
     label: 'IDR (Rp)',
   },
 };
 
-export function formatCurrency(amountUSD: number, currency: CurrencyCode = 'USD'): string {
+export function formatCurrency(
+  amountUSD: number,
+  currency: CurrencyCode = 'USD'
+): string {
   const config = currencyConfigs[currency] || currencyConfigs.USD;
   const converted = amountUSD * config.rateFromUSD;
   if (currency === 'IDR') {

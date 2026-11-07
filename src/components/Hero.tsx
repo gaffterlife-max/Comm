@@ -94,7 +94,7 @@ export const Hero: React.FC<HeroProps> = ({
             <span>
               Character art from{' '}
               <strong className="text-amber-700 dark:text-amber-300 font-mono font-bold">
-                {formatCurrency(25, currency)}
+                {formatCurrency(20, currency)}
               </strong>
             </span>
           </div>
