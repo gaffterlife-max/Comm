@@ -38,7 +38,7 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Description */}
           <p className="text-sm sm:text-base lg:text-lg dark:text-stone-300 text-stone-700 leading-relaxed max-w-2xl font-sans">
-            Illustrator and manga colorist (
+            I'm a manga colorist and an illustrator (
             <a
               href={artistProfile.socials.twitter}
               target="_blank"
@@ -47,8 +47,8 @@ export const Hero: React.FC<HeroProps> = ({
             >
               {artistProfile.handle}
             </a>
-            ). Bringing dynamic lighting, rich depth, and calibrated print-ready
-            finishes to your comic panels and character artwork.
+            ). Coloring your favorite manga panels in my style! And i do Illustration too :D
+            
           </p>
 
           {/* Centered Badges */}
