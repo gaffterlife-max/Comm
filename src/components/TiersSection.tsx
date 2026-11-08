@@ -149,14 +149,19 @@ const illustrationSamples: Record<string, SampleImage[]> = {
   ],
   'full-body': [
     {
-      title: 'Teddy Fanart · Full-Body',
+      title: 'Teddy Fanart ',
       image: '/assets/images/teddy fanart full body.jpg',
       aspectRatio: 3119 / 2205, // 1.414
     },
     {
-      title: 'Celestial Seraph · Full-Body Showcase',
-      image: '/assets/images/character_illustration_showcase_1793799152713.jpg',
-      aspectRatio: 896 / 1200, // 0.747
+      title: 'Isagi Fanart',
+      image: '/assets/images/isagi yoichi fanart1.jpg',
+      aspectRatio: 2400 / 1703, // 1.409 (landscape)
+    },
+    {
+      title: 'Shidou Fanart',
+      image: '/assets/images/1000079952.jpg',
+      aspectRatio: 1701 / 1200, // 1.418 (landscape)
     },
   ],
 };
@@ -226,7 +231,8 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
     currentMangaImages[mangaSlideIndex] || currentMangaImages[0];
   const currentMangaRatio =
     (currentMangaItem &&
-      (currentMangaItem.aspectRatio || dynamicRatios[currentMangaItem.image])) ||
+      (dynamicRatios[currentMangaItem.image] ||
+        currentMangaItem.aspectRatio)) ||
     (selectedMangaCatId === 'double-spread' ? 1.39 : 0.7);
 
   const currentIllustrationItem =
@@ -234,8 +240,8 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
     currentIllustrationImages[0];
   const currentIllustrationRatio =
     (currentIllustrationItem &&
-      (currentIllustrationItem.aspectRatio ||
-        dynamicRatios[currentIllustrationItem.image])) ||
+      (dynamicRatios[currentIllustrationItem.image] ||
+        currentIllustrationItem.aspectRatio)) ||
     1;
 
   const handleOpenZoom = (images: SampleImage[], initialIdx: number) => {
