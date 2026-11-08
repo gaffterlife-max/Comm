@@ -109,8 +109,8 @@ const mangaSamples: Record<string, SampleImage[]> = {
       aspectRatio: 2950 / 2197, // 1.343
     },
     {
-      title: 'Rin Goal',
-      image: '/assets/images/RINchan.jpg',
+      title: 'Rin vs Loki',
+      image: '/assets/images/Barely.jpg',
       aspectRatio: 10000 / 7176, // 1.393
     },
   ],
@@ -119,19 +119,14 @@ const mangaSamples: Record<string, SampleImage[]> = {
 const illustrationSamples: Record<string, SampleImage[]> = {
   bust: [
     {
-      title: 'NG11 Fanart · Bust',
-      image: '/assets/images/ng11 fanart bust.jpg',
+      title: 'Isagi',
+      image: 'public/assets/images/1000074271.jpg',
       aspectRatio: 3360 / 1822, // 1.844
     },
     {
-      title: 'Rin Fanart · Bust',
-      image: '/assets/images/rin fanart bust.jpg',
+      title: 'Kaneki',
+      image: 'public/assets/images/kneki.png',
       aspectRatio: 2532 / 3426, // 0.739
-    },
-    {
-      title: 'Teddy Fanart · Headshot',
-      image: '/assets/images/teddy fanart headshot.jpg',
-      aspectRatio: 4220 / 3211, // 1.314
     },
   ],
   'half-body': [
@@ -141,8 +136,8 @@ const illustrationSamples: Record<string, SampleImage[]> = {
       aspectRatio: 3001 / 4192, // 0.716
     },
     {
-      title: 'Isagi Yoichi Fanart · Half-Body',
-      image: '/assets/images/isagi yoichi fanart1.jpg',
+      title: 'Rin',
+      image: 'public/assets/images/rin fanart bust.jpg',
       aspectRatio: 4211 / 2988, // 1.409
     },
   ],
