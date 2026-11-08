@@ -34,29 +34,72 @@ interface SampleImage {
 const mangaSamples: Record<string, SampleImage[]> = {
   'full-panel': [
     {
-      title: 'The Blazing Duel · Climax Action Panel',
-      image: '/assets/images/manga_colored_page_epic_1793799150669.jpg',
+      title: 'World Hater Majik',
+      image: 'public/assets/images/whm ichi the magic full panel.jpg',
     },
     {
-      title: 'Awakening Impact · Dynamic Manga Panel',
-      image: '/assets/images/10000954181.png',
+      title: 'Hild',
+      image: 'public/assets/images/vinland saga full panel.jpg',
+    },
+    {
+      title: 'Julian',
+      image: 'public/assets/images/julian full panel.jpg',
+    },
+   {
+      title: 'Frieren',
+      image: 'public/assets/images/frieren full panel.jpg',
+    },
+  {
+      title: 'Shidou',
+      image: 'public/assets/images/shidou ful panel.jpg',
     },
   ],
   'character-focused-panel': [
     {
-      title: 'Warrior Focus · Climax Battle Portrait',
-      image: '/assets/images/regenerated_image_1793811718575.png',
+      title: 'Teddy',
+      image: 'public/assets/images/teddy cfp1.jpg',
     },
     {
-      title: 'Dual Blades Stance · Inked Foundation & Shading',
-      image: '/assets/images/manga_lineart_raw_1793799152507.jpg',
+      title: 'Loki',
+      image: 'public/assets/images/loki cfp.jpg',
     },
+    {
+      title: 'Isagi',
+      image: 'public/assets/images/isagi yoichi cfp2.jpg',
+    },
+    {
+      title: 'Teddy',
+      image: 'public/assets/images/teddy cfp2.jpg',
+    },
+    {
+      title: 'Isagi',
+      image: 'public/assets/images/isagi yoichi cfp3.jpg',
+    },
+   
+
   ],
   'double-spread': [
     {
-      title: 'Skyline Echoes · Cinematic Double Spread',
-      image: '/assets/images/manga_cover_spread_1793799153733.jpg',
+      title: 'Isagi Vs Hugo',
+      image: 'public/assets/images/hugo vs isagi spread.jpg',
     },
+    {
+      title: 'Sun Ken Rock',
+      image: 'public/assets/images/sun ken rock spread.jpg',
+    },
+    {
+      title: 'Asta the Wizard King',
+      image: 'public/assets/images/asta spread.jpg',
+    },
+    {
+      title: 'Nagi',
+      image: 'public/assets/images/Nuts1.png',
+    },
+    {
+      title: 'Rin Goal',
+      image: 'public/assets/images/RINchan.jpg',
+    },
+
   ],
 };
 
