@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Globe, Menu, Moon, Sparkles, Sun, X } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Lock, Menu, Moon, Sliders, Sparkles, Sun, X } from 'lucide-react';
 import { artistProfile } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
 import { CurrencyCode, Language } from '../types';
+import { OperatorConfig } from './OperatorModal';
 
 interface NavbarProps {
   currency: CurrencyCode;
@@ -12,6 +13,10 @@ interface NavbarProps {
   isDark: boolean;
   onToggleTheme: () => void;
   onBookCommission: () => void;
+  operatorConfig?: OperatorConfig;
+  onOpenOperator?: () => void;
+  onLogoTripleClick?: () => void;
+  isOperatorActive?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -22,9 +27,34 @@ export const Navbar: React.FC<NavbarProps> = ({
   isDark,
   onToggleTheme,
   onBookCommission,
+  operatorConfig,
+  onOpenOperator,
+  onLogoTripleClick,
+  isOperatorActive = false,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = getTranslation(lang);
+
+  const logoClickRef = useRef<{ count: number; timer: ReturnType<typeof setTimeout> | null }>({
+    count: 0,
+    timer: null,
+  });
+
+  const handleLogoClick = () => {
+    logoClickRef.current.count += 1;
+    if (logoClickRef.current.timer) clearTimeout(logoClickRef.current.timer);
+
+    if (logoClickRef.current.count >= 3) {
+      logoClickRef.current.count = 0;
+      if (onLogoTripleClick) {
+        onLogoTripleClick();
+      }
+    } else {
+      logoClickRef.current.timer = setTimeout(() => {
+        logoClickRef.current.count = 0;
+      }, 1500);
+    }
+  };
 
   const navLinks = [
     { label: t.stylesAndRates, href: '#tiers' },
@@ -36,16 +66,35 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-40 w-full backdrop-blur-md dark:bg-[#1a1715]/95 bg-[#faf7f2]/95 border-b dark:border-[#332c27] border-[#e2d7c9] transition-colors">
       {/* Top Open Status Ticker */}
       <div className="dark:bg-[#26211d] bg-[#f2eae0] border-b dark:border-[#38312b] border-[#e2d7c9] px-2 sm:px-4 py-1 text-center text-[11px] sm:text-xs dark:text-amber-200 text-stone-800 font-medium flex items-center justify-center gap-1.5 sm:gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span>{t.commissionsOpen}</span>
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${
+            operatorConfig?.isOpen !== false && (operatorConfig?.availableSlots ?? 7) > 0
+              ? 'bg-emerald-500 animate-pulse'
+              : 'bg-rose-500'
+          }`}
+        />
+        <span>
+          {operatorConfig?.isOpen !== false && (operatorConfig?.availableSlots ?? 7) > 0
+            ? t.commissionsOpen
+            : lang === 'ID'
+            ? 'Komisi saat ini DITUTUP / Slot Penuh'
+            : 'Commissions currently CLOSED / Slots Full'}
+        </span>
         <span
           aria-hidden="true"
           className="text-amber-700/40 dark:text-amber-300/30"
         >
           ·
         </span>
-        <span className="font-mono text-[10px] sm:text-[11px] bg-amber-400 text-stone-950 px-2 py-0.5 rounded-md font-bold shadow-xs">
-          🎯 Slot 7/7
+        <span
+          className={`font-mono text-[10px] sm:text-[11px] px-2 py-0.5 rounded-md font-bold shadow-xs ${
+            operatorConfig?.isOpen !== false && (operatorConfig?.availableSlots ?? 7) > 0
+              ? 'bg-amber-400 text-stone-950'
+              : 'bg-rose-500 text-white'
+          }`}
+        >
+          🎯 Slot {operatorConfig?.availableSlots ?? 7}/
+          {operatorConfig?.totalSlots ?? 7}
         </span>
         <span
           aria-hidden="true"
@@ -78,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-2.5 sm:gap-3 shrink-0 group hover:opacity-90 transition-opacity min-w-0"
           aria-label="Home"
         >
-          <div className="relative shrink-0">
+          <div className="relative shrink-0 cursor-pointer" onClick={handleLogoClick}>
             <img
               src={artistProfile.logoImage}
               alt="Duck Logo"
@@ -171,6 +220,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Moon className="w-4 h-4 text-stone-700" />
             )}
           </button>
+
+          {/* Artist Operator Access (Shown ONLY when logged in / active) */}
+          {isOperatorActive && onOpenOperator && (
+            <button
+              type="button"
+              onClick={onOpenOperator}
+              aria-label="Artist Operator Mode"
+              title={lang === 'ID' ? 'Operator Panel' : 'Operator Panel'}
+              className="px-2.5 py-1.5 rounded-xl bg-amber-400 text-stone-950 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer shrink-0 active:scale-95"
+            >
+              <Sliders className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Operator</span>
+            </button>
+          )}
 
           {/* Order Commission CTA - Desktop / Tablet */}
           <button

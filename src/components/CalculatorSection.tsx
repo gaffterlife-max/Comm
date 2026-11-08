@@ -18,6 +18,7 @@ import {
 } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
 import { CurrencyCode, Language, OrderInquiry } from '../types';
+import { OperatorConfig } from './OperatorModal';
 
 interface CalculatorSectionProps {
   currency: CurrencyCode;
@@ -25,6 +26,7 @@ interface CalculatorSectionProps {
   selectedTierId: string;
   onSelectTier: (tierId: string) => void;
   onSubmitSuccess: (order: OrderInquiry) => void;
+  operatorConfig?: OperatorConfig;
 }
 
 export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
@@ -33,6 +35,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   selectedTierId = 'manga-coloring',
   onSelectTier,
   onSubmitSuccess,
+  operatorConfig,
 }) => {
   const t = getTranslation(lang);
   const [activeTierId, setActiveTierId] = useState(
@@ -92,7 +95,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
   );
 
   const { totalAmount, totalUSD, breakdown, estimatedDays } = useMemo(() => {
-    const unitPrice = getOptionPrice(currentOption, currency);
+    const unitPrice = getOptionPrice(currentOption, currency, operatorConfig?.customPrices);
     const total = unitPrice * quantity;
     const usdTotal = currentOption.priceUSD * quantity;
     const unitLabel =
@@ -395,7 +398,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                         </div>
                       </div>
                       <div className="mt-2 pt-2 border-t dark:border-[#38312b] border-[#eee5d8] font-mono text-xs font-bold text-amber-700 dark:text-amber-300">
-                        {formatCurrency(getOptionPrice(opt, currency), currency)}
+                        {formatCurrency(getOptionPrice(opt, currency, operatorConfig?.customPrices), currency)}
                       </div>
                     </button>
                   );
@@ -597,7 +600,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   </div>
                 </div>
                 <div className="text-right font-mono text-xs font-bold dark:text-amber-300 text-amber-900">
-                  {formatCurrency(getOptionPrice(currentOption, currency), currency)}
+                  {formatCurrency(getOptionPrice(currentOption, currency, operatorConfig?.customPrices), currency)}
                 </div>
               </div>
             </div>

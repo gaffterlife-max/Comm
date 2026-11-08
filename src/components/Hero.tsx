@@ -4,11 +4,14 @@ import { artistProfile, formatCurrency } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
 import { CurrencyCode, Language } from '../types';
 
+import { OperatorConfig } from './OperatorModal';
+
 interface HeroProps {
   currency: CurrencyCode;
   lang: Language;
   onOpenCalculator: () => void;
   onViewTiers: () => void;
+  operatorConfig?: OperatorConfig;
 }
 
 export const Hero: React.FC<HeroProps> = ({
@@ -16,8 +19,13 @@ export const Hero: React.FC<HeroProps> = ({
   lang,
   onOpenCalculator,
   onViewTiers,
+  operatorConfig,
 }) => {
   const t = getTranslation(lang);
+  const isOpen =
+    operatorConfig?.isOpen !== false && (operatorConfig?.availableSlots ?? 7) > 0;
+  const availSlots = operatorConfig?.availableSlots ?? 7;
+  const totalSlots = operatorConfig?.totalSlots ?? 7;
 
   return (
     <section className="relative overflow-hidden pt-8 pb-12 sm:pt-14 sm:pb-18 lg:pt-20 lg:pb-24 border-b-2 dark:border-[#332c27] border-[#e8dfd5]">
@@ -28,11 +36,33 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl mx-auto text-center flex flex-col items-center space-y-3.5 sm:space-y-6">
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 rounded-full bg-amber-400/15 border border-amber-400/40 text-[11px] sm:text-xs font-bold text-amber-900 dark:text-amber-200 shadow-xs max-w-full">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-            <span className="truncate">{t.commissionsOpenBadge}</span>
-            <span className="px-2 py-0.5 rounded-md bg-amber-400 text-stone-950 font-mono text-[10px] sm:text-[11px] font-extrabold ml-0.5 shrink-0">
-              Slot 7/7
+          <div
+            className={`inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-bold border shadow-xs max-w-full ${
+              isOpen
+                ? 'bg-amber-400/15 border-amber-400/40 text-amber-900 dark:text-amber-200'
+                : 'bg-rose-500/15 border-rose-500/40 text-rose-300'
+            }`}
+          >
+            <span
+              className={`w-2 h-2 rounded-full shrink-0 ${
+                isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'
+              }`}
+            />
+            <span className="truncate">
+              {isOpen
+                ? t.commissionsOpenBadge
+                : lang === 'ID'
+                ? 'Komisi Ditutup · Slot Penuh'
+                : 'Commissions Closed · Slots Full'}
+            </span>
+            <span
+              className={`px-2 py-0.5 rounded-md font-mono text-[10px] sm:text-[11px] font-extrabold ml-0.5 shrink-0 ${
+                isOpen
+                  ? 'bg-amber-400 text-stone-950'
+                  : 'bg-rose-600 text-white'
+              }`}
+            >
+              Slot {availSlots}/{totalSlots}
             </span>
           </div>
 
@@ -52,7 +82,15 @@ export const Hero: React.FC<HeroProps> = ({
               <span className="text-amber-500 font-bold">🎯</span>
               <span>
                 {lang === 'ID' ? 'Slot Komisi:' : 'Commission Slot:'}{' '}
-                <strong className="text-amber-600 dark:text-amber-300 font-mono">7/7</strong>
+                <strong
+                  className={`font-mono ${
+                    isOpen
+                      ? 'text-amber-600 dark:text-amber-300'
+                      : 'text-rose-400'
+                  }`}
+                >
+                  {availSlots}/{totalSlots}
+                </strong>
               </span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#3d332a] border-[#d8ccbe] shadow-xs">

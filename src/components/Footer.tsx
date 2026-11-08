@@ -1,14 +1,19 @@
-import React from 'react';
-import { Layers, Mail, Monitor } from 'lucide-react';
+import { Layers, Lock, Mail, Monitor } from 'lucide-react';
 import { artistProfile } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
 import { Language } from '../types';
 
 interface FooterProps {
   lang?: Language;
+  onOpenOperator?: () => void;
+  isOperatorActive?: boolean;
 }
 
-export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
+export const Footer: React.FC<FooterProps> = ({
+  lang = 'EN',
+  onOpenOperator,
+  isOperatorActive = false,
+}) => {
   const t = getTranslation(lang);
   return (
     <footer className="dark:bg-[#161311] bg-stone-900 border-t dark:border-[#2e2722] border-stone-800 text-stone-400 text-xs transition-colors">
@@ -111,9 +116,10 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
 
         {/* Bottom copyright row */}
         <div className="mt-8 sm:mt-14 pt-4 sm:pt-6 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-stone-500 font-normal">
-          <div className="text-center sm:text-left">
-            © {new Date().getFullYear()} {artistProfile.name} (
-            {artistProfile.handle}) · All rights reserved.
+          <div className="text-center sm:text-left flex items-center gap-2">
+            <span>
+              © {new Date().getFullYear()} {artistProfile.name} ({artistProfile.handle}) · All rights reserved.
+            </span>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-3 text-stone-400 font-medium">
             <a href="#tiers" className="hover:text-amber-400 transition-colors">
@@ -130,6 +136,20 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
             <a href="#terms" className="hover:text-amber-400 transition-colors">
               {t.terms}
             </a>
+            {isOperatorActive && onOpenOperator && (
+              <>
+                <span aria-hidden="true">·</span>
+                <button
+                  type="button"
+                  onClick={onOpenOperator}
+                  className="text-stone-500 hover:text-amber-400 transition-colors flex items-center gap-1 cursor-pointer font-mono"
+                  title="Operator Mode Access"
+                >
+                  <Lock className="w-3 h-3 text-amber-500" />
+                  <span>Operator</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

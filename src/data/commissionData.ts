@@ -511,8 +511,18 @@ export const currencyConfigs: Record<CurrencyCode, CurrencyConfig> = {
 
 export function getOptionPrice(
   option: CategoryOption,
-  currency: CurrencyCode = 'USD'
+  currency: CurrencyCode = 'USD',
+  customPrices?: Record<string, { priceUSD: number; priceIDR: number }>
 ): number {
+  if (customPrices && customPrices[option.id]) {
+    const custom = customPrices[option.id];
+    if (currency === 'IDR' && custom.priceIDR) {
+      return custom.priceIDR;
+    }
+    if (currency === 'USD' && custom.priceUSD) {
+      return custom.priceUSD;
+    }
+  }
   if (currency === 'IDR' && option.priceIDR) {
     return option.priceIDR;
   }

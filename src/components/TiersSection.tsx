@@ -20,11 +20,13 @@ import {
 } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
 import { CurrencyCode, Language } from '../types';
+import { OperatorConfig } from './OperatorModal';
 
 interface TiersSectionProps {
   currency: CurrencyCode;
   lang: Language;
   onSelectTier: (tierId: string) => void;
+  operatorConfig?: OperatorConfig;
 }
 
 interface SampleImage {
@@ -170,6 +172,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
   currency,
   lang,
   onSelectTier,
+  operatorConfig,
 }) => {
   const [selectedMangaCatId, setSelectedMangaCatId] = useState('full-panel');
   const [selectedIllustrationScopeId, setSelectedIllustrationScopeId] =
@@ -413,7 +416,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                       {item.emoji} {item.name}
                     </span>
                     <span className="text-[9px] sm:text-[10px] font-mono opacity-90">
-                      {formatCurrency(getOptionPrice(item, currency), currency)}
+                      {formatCurrency(getOptionPrice(item, currency, operatorConfig?.customPrices), currency)}
                     </span>
                   </button>
                 ))}
@@ -549,7 +552,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 </div>
                 <div className="text-right">
                   <span className="text-xl sm:text-2xl font-extrabold font-mono text-amber-700 dark:text-amber-300">
-                    {formatCurrency(getOptionPrice(selectedMangaCat, currency), currency)}
+                    {formatCurrency(getOptionPrice(selectedMangaCat, currency, operatorConfig?.customPrices), currency)}
                   </span>
                   <span className="text-[10px] text-stone-500 font-mono block">
                     / panel
@@ -645,7 +648,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                       {scope.emoji} {scope.name.split(' ')[0]}
                     </span>
                     <span className="text-[9px] sm:text-[10px] font-mono opacity-90">
-                      {formatCurrency(getOptionPrice(scope, currency), currency)}
+                      {formatCurrency(getOptionPrice(scope, currency, operatorConfig?.customPrices), currency)}
                     </span>
                   </button>
                 ))}
@@ -793,7 +796,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 <div className="text-right">
                   <span className="text-xl sm:text-2xl font-extrabold font-mono text-amber-700 dark:text-amber-300">
                     {formatCurrency(
-                      getOptionPrice(selectedIllustrationScope, currency),
+                      getOptionPrice(selectedIllustrationScope, currency, operatorConfig?.customPrices),
                       currency
                     )}
                   </span>
