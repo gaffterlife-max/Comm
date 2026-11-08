@@ -81,13 +81,13 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="flex items-center justify-start sm:justify-center gap-2 mb-8 sm:mb-12 overflow-x-auto pb-1 max-w-full">
+      {/* Tabs - Mobile Horizontal Scroll with touch friendliness */}
+      <div className="flex items-center justify-start sm:justify-center gap-2 mb-8 sm:mb-12 overflow-x-auto pb-2 max-w-full touch-pan-x scrollbar-none">
         <div className="flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 dark:bg-[#25201d] bg-stone-100 border dark:border-[#38312b] border-stone-300 rounded-2xl shadow-inner shrink-0">
           <button
             type="button"
             onClick={() => setActiveTab('workflow')}
-            className={`px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
+            className={`min-h-[40px] px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap flex items-center justify-center ${
               activeTab === 'workflow'
                 ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
                 : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'
@@ -98,7 +98,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('scope')}
-            className={`px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
+            className={`min-h-[40px] px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap flex items-center justify-center ${
               activeTab === 'scope'
                 ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
                 : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'
@@ -109,7 +109,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('policies')}
-            className={`px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
+            className={`min-h-[40px] px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap flex items-center justify-center ${
               activeTab === 'policies'
                 ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
                 : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'

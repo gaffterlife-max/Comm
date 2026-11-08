@@ -61,14 +61,14 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
       className="fixed inset-0 z-50 dark:bg-black/80 bg-stone-900/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 animate-fadeIn"
     >
       <div className="relative max-w-lg w-full max-h-[92vh] overflow-y-auto dark:bg-[#201c19] bg-white border dark:border-[#382f2a] border-amber-300 rounded-3xl shadow-2xl p-5 sm:p-7 space-y-4">
-        {/* Close Icon Button */}
+        {/* Close Icon Button - 40px Touch Target */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Close dialog"
-          className="absolute top-4 right-4 p-2 rounded-xl dark:bg-[#2a2420] bg-stone-100 text-stone-500 hover:text-stone-900 dark:hover:text-white transition-colors cursor-pointer border dark:border-[#382f2a] border-stone-200"
+          className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-10 h-10 flex items-center justify-center rounded-xl dark:bg-[#2a2420] bg-stone-100 text-stone-500 hover:text-stone-900 dark:hover:text-white transition-colors cursor-pointer border dark:border-[#382f2a] border-stone-200 active:scale-95"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
 
         {/* Header Section */}
@@ -211,10 +211,10 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
           <button
             type="button"
             onClick={handleSendEmail}
-            className="flex-1 py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-500/20 active:scale-98"
+            className="flex-1 min-h-[48px] py-3.5 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-500/20 active:scale-98"
           >
-            <Mail className="w-4 h-4 fill-stone-950" />
-            <span>
+            <Mail className="w-4 h-4 fill-stone-950 shrink-0" />
+            <span className="text-center">
               {lang === 'ID'
                 ? 'Kirim Email ke Artist (gaffterlife@gmail.com)'
                 : 'Send Email to Artist (gaffterlife@gmail.com)'}
@@ -225,19 +225,19 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
           <button
             type="button"
             onClick={copySummary}
-            className="py-3 px-4 rounded-2xl dark:bg-[#2a2420] bg-stone-100 hover:dark:bg-[#332b27] hover:bg-stone-200 text-stone-900 dark:text-stone-100 text-xs font-semibold transition-all flex items-center justify-center gap-2 border dark:border-[#3d332d] border-stone-300 cursor-pointer active:scale-98"
+            className="min-h-[46px] py-3 px-4 rounded-2xl dark:bg-[#2a2420] bg-stone-100 hover:dark:bg-[#332b27] hover:bg-stone-200 text-stone-900 dark:text-stone-100 text-xs font-semibold transition-all flex items-center justify-center gap-2 border dark:border-[#3d332d] border-stone-300 cursor-pointer active:scale-98"
             title="Copy inquiry summary text"
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-emerald-500" />
+                <Check className="w-4 h-4 text-emerald-500 shrink-0" />
                 <span className="text-emerald-500 font-bold">
                   {lang === 'ID' ? 'Tersalin!' : 'Copied!'}
                 </span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 text-amber-500" />
+                <Copy className="w-4 h-4 text-amber-500 shrink-0" />
                 <span>{lang === 'ID' ? 'Salin Ringkasan' : 'Copy Summary'}</span>
               </>
             )}
@@ -247,7 +247,7 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="py-3 px-4 rounded-2xl dark:bg-[#25201c] bg-[#ede5db] hover:bg-[#e4dbcf] dark:hover:bg-[#302a25] dark:text-stone-200 text-stone-800 font-semibold text-xs border dark:border-[#38312b] border-[#dfd4c7] transition-all cursor-pointer active:scale-98"
+            className="min-h-[46px] py-3 px-4 rounded-2xl dark:bg-[#25201c] bg-[#ede5db] hover:bg-[#e4dbcf] dark:hover:bg-[#302a25] dark:text-stone-200 text-stone-800 font-semibold text-xs border dark:border-[#38312b] border-[#dfd4c7] transition-all cursor-pointer active:scale-98"
           >
             {lang === 'ID' ? 'Selesai' : 'Done'}
           </button>

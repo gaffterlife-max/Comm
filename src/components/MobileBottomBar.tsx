@@ -40,10 +40,10 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
         <button
           type="button"
           onClick={onOpenCalculator}
-          className="py-2 px-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs whitespace-nowrap shrink-0 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+          className="min-h-[44px] py-2.5 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs whitespace-nowrap shrink-0 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
         >
           <span>{t.getQuote}</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <ArrowRight className="w-3.5 h-3.5 shrink-0" />
         </button>
       </div>
     </div>

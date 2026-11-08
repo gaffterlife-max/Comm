@@ -99,6 +99,10 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
   const [mangaSlideIndex, setMangaSlideIndex] = useState(0);
   const [illustrationSlideIndex, setIllustrationSlideIndex] = useState(0);
 
+  // Swipe handling for touch devices
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+
   // Zoom lightbox state with gallery navigation
   const [zoomImageList, setZoomImageList] = useState<SampleImage[]>([]);
   const [zoomIndex, setZoomIndex] = useState<number | null>(null);
@@ -157,6 +161,54 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
     setZoomScale(1);
   };
 
+  // Generic touch swipe gesture handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEndX(null);
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleMangaTouchEnd = () => {
+    if (!touchStartX || !touchEndX || currentMangaImages.length <= 1) return;
+    const distance = touchStartX - touchEndX;
+    if (distance > 45) {
+      // Swiped Left -> Next
+      setMangaSlideIndex((prev) => (prev + 1) % currentMangaImages.length);
+    } else if (distance < -45) {
+      // Swiped Right -> Prev
+      setMangaSlideIndex(
+        (prev) => (prev - 1 + currentMangaImages.length) % currentMangaImages.length
+      );
+    }
+  };
+
+  const handleIllustrationTouchEnd = () => {
+    if (!touchStartX || !touchEndX || currentIllustrationImages.length <= 1) return;
+    const distance = touchStartX - touchEndX;
+    if (distance > 45) {
+      // Swiped Left -> Next
+      setIllustrationSlideIndex((prev) => (prev + 1) % currentIllustrationImages.length);
+    } else if (distance < -45) {
+      // Swiped Right -> Prev
+      setIllustrationSlideIndex(
+        (prev) => (prev - 1 + currentIllustrationImages.length) % currentIllustrationImages.length
+      );
+    }
+  };
+
+  const handleZoomTouchEnd = () => {
+    if (!touchStartX || !touchEndX || zoomImageList.length <= 1) return;
+    const distance = touchStartX - touchEndX;
+    if (distance > 45) {
+      handleZoomNext();
+    } else if (distance < -45) {
+      handleZoomPrev();
+    }
+  };
+
   // Keyboard navigation for zoom lightbox
   useEffect(() => {
     if (zoomIndex === null) return;
@@ -187,9 +239,9 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
   return (
     <section
       id="tiers"
-      className="py-14 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b-2 dark:border-[#332c27] border-[#e8dfd5]"
+      className="py-12 sm:py-20 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b-2 dark:border-[#332c27] border-[#e8dfd5]"
     >
-      <div className="mb-10 sm:mb-14 text-center max-w-2xl mx-auto space-y-2.5 sm:space-y-3">
+      <div className="mb-8 sm:mb-14 text-center max-w-2xl mx-auto space-y-2 sm:space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-[11px] sm:text-xs font-bold text-amber-900 dark:text-amber-200 shadow-xs">
           <Sparkles className="w-3.5 h-3.5 text-amber-500" />
           <span>{t.commissionPackagesBadge}</span>
@@ -204,13 +256,13 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch">
         {/* Card 1: Manga Coloring */}
-        <div className="flex flex-col justify-between rounded-3xl border-2 dark:border-amber-400/60 border-amber-400 dark:bg-[#25201c] bg-white p-5 sm:p-7 relative overflow-hidden group shadow-md hover:shadow-xl transition-all duration-200">
+        <div className="flex flex-col justify-between rounded-3xl border-2 dark:border-amber-400/60 border-amber-400 dark:bg-[#25201c] bg-white p-4 sm:p-7 relative overflow-hidden group shadow-md hover:shadow-xl transition-all duration-200">
           <div className="absolute top-0 right-0 bg-amber-400 text-stone-950 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider py-1 px-3 sm:py-1.5 sm:px-4 rounded-bl-2xl shadow-xs">
             {mangaTier.badge || 'Popular'}
           </div>
 
           <div>
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-2.5 sm:gap-3 mb-2">
               <span className="text-3xl sm:text-4xl">{mangaTier.emoji}</span>
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold dark:text-amber-50 text-stone-900 font-display">
@@ -225,24 +277,24 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               {mangaTier.tagline}
             </p>
 
-            {/* Manga Category Sub-selectors */}
+            {/* Manga Category Sub-selectors - Touch Friendly */}
             <div className="mt-4 pt-3.5 border-t dark:border-[#38312b] border-[#eee5d8]">
               <label className="block text-[11px] sm:text-xs font-bold dark:text-amber-200 text-stone-800 uppercase tracking-wider mb-2 font-display">
-                Choose Manga Category:
+                {t.chooseMangaCategory}
               </label>
-              <div className="grid grid-cols-3 gap-1 sm:gap-2 p-1.5 rounded-2xl dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#e8dfd5]">
+              <div className="grid grid-cols-3 gap-1.5 p-1 sm:p-1.5 rounded-2xl dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#e8dfd5]">
                 {mangaPanelCategories.map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => setSelectedMangaCatId(item.id)}
-                    className={`py-2 px-1 text-[10px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
+                    className={`py-2 px-1 text-[10px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 min-h-[46px] ${
                       selectedMangaCatId === item.id
-                        ? 'bg-amber-400 text-stone-950 shadow-xs'
+                        ? 'bg-amber-400 text-stone-950 shadow-xs font-black'
                         : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'
                     }`}
                   >
-                    <span className="text-center leading-tight">
+                    <span className="text-center leading-tight line-clamp-1">
                       {item.emoji} {item.name}
                     </span>
                     <span className="text-[9px] sm:text-[10px] font-mono opacity-90">
@@ -253,9 +305,14 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               </div>
             </div>
 
-            {/* Large High-Impact Picture Slider for Manga Coloring */}
+            {/* Large High-Impact Picture Slider for Manga Coloring with Touch Swipe */}
             {currentMangaImages.length > 0 && (
-              <div className="relative mt-4 rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 h-72 sm:h-96 lg:h-[400px] w-full group/slider shadow-md flex items-center justify-center">
+              <div
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleMangaTouchEnd}
+                className="relative mt-4 rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 h-72 sm:h-96 lg:h-[400px] w-full group/slider shadow-md flex items-center justify-center touch-pan-y"
+              >
                 {/* Ambient Blurred Artwork Backdrop */}
                 <img
                   src={currentMangaImages[mangaSlideIndex]?.image}
@@ -278,23 +335,23 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
 
                 {/* Sub-Category Badge */}
                 <div className="absolute top-3 left-3 z-20">
-                  <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
+                  <span className="px-2.5 sm:px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] sm:text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
                     <span>{selectedMangaCat.emoji}</span>
                     <span>{selectedMangaCat.name}</span>
                   </span>
                 </div>
 
-                {/* Zoom Trigger Button */}
+                {/* Zoom Trigger Button - Touch Target >= 40px */}
                 <button
                   type="button"
                   onClick={() =>
                     handleOpenZoom(currentMangaImages, mangaSlideIndex)
                   }
-                  className="absolute top-3 right-3 z-20 p-2 rounded-xl bg-black/65 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold"
-                  title="Click to Zoom Artwork"
+                  className="absolute top-3 right-3 z-20 p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold active:scale-95"
+                  title={t.zoomSamplePicture}
                 >
                   <ZoomIn className="w-4 h-4" />
-                  <span className="hidden sm:inline text-[11px]">Zoom</span>
+                  <span className="text-[11px] sm:inline">{t.zoom}</span>
                 </button>
 
                 {/* Artwork Title overlay */}
@@ -313,7 +370,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                           prev === 0 ? currentMangaImages.length - 1 : prev - 1
                         );
                       }}
-                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
                       aria-label="Previous artwork image"
                     >
                       <ArrowLeft className="w-4 h-4" />
@@ -326,7 +383,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                           prev === currentMangaImages.length - 1 ? 0 : prev + 1
                         );
                       }}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
                       aria-label="Next artwork image"
                     >
                       <ArrowRight className="w-4 h-4" />
@@ -354,14 +411,14 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
             )}
 
             {/* Detail Preview Box */}
-            <div className="mt-4 p-4 rounded-2xl dark:bg-[#1f1b18] bg-[#fcf9f5] border dark:border-[#38312b] border-[#e8dfd5] space-y-2.5">
+            <div className="mt-4 p-3.5 sm:p-4 rounded-2xl dark:bg-[#1f1b18] bg-[#fcf9f5] border dark:border-[#38312b] border-[#e8dfd5] space-y-2.5">
               <div className="flex items-baseline justify-between border-b dark:border-[#332c27] border-[#ede5db] pb-2">
                 <div>
                   <span className="text-xs font-bold dark:text-amber-100 text-stone-900 font-display block">
                     {selectedMangaCat.emoji} {selectedMangaCat.name}
                   </span>
                   <span className="text-[10px] text-stone-500 font-medium">
-                    Selected Category
+                    {t.selectedCategory}
                   </span>
                 </div>
                 <div className="text-right">
@@ -377,7 +434,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               <div className="flex items-center gap-1.5 text-xs text-stone-500 font-medium pt-0.5">
                 <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 <span>
-                  Turnaround:{' '}
+                  {t.turnaround}{' '}
                   <strong className="text-stone-800 dark:text-stone-200">
                     {selectedMangaCat.turnaroundDays}
                   </strong>
@@ -386,7 +443,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
 
               <div className="pt-2 border-t dark:border-[#332c27] border-[#ede5db]">
                 <div className="text-[10px] font-bold dark:text-amber-300 text-stone-900 uppercase tracking-wider mb-1 font-display">
-                  Category Deliverables:
+                  {t.categoryDeliverables}
                 </div>
                 <ul className="space-y-1 text-xs dark:text-stone-300 text-stone-700">
                   {selectedMangaCat.deliverables.map((deliv, idx) => (
@@ -409,22 +466,22 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 const el = document.getElementById('calculator');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="w-full py-3.5 px-5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md active:scale-98"
+              className="w-full min-h-[48px] py-3.5 px-5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md active:scale-98"
             >
-              <span>Calculate & Order Manga Coloring</span>
+              <span>{t.calculateAndOrderManga}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Card 2: Illustration */}
-        <div className="flex flex-col justify-between rounded-3xl border-2 dark:border-[#38312b] border-[#e2d7c9] dark:bg-[#231f1c] bg-white p-5 sm:p-7 relative overflow-hidden group hover:shadow-xl transition-all duration-200">
+        <div className="flex flex-col justify-between rounded-3xl border-2 dark:border-[#38312b] border-[#e2d7c9] dark:bg-[#231f1c] bg-white p-4 sm:p-7 relative overflow-hidden group hover:shadow-xl transition-all duration-200">
           <div className="absolute top-0 right-0 bg-stone-200 dark:bg-[#332b24] text-stone-800 dark:text-stone-200 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider py-1 px-3 sm:py-1.5 sm:px-4 rounded-bl-2xl shadow-xs border-l border-b border-[#e2d7c9] dark:border-[#38312b]">
             {illustrationTier.badge || 'Custom Art'}
           </div>
 
           <div>
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-2.5 sm:gap-3 mb-2">
               <span className="text-3xl sm:text-4xl">
                 {illustrationTier.emoji}
               </span>
@@ -433,7 +490,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                   {illustrationTier.name}
                 </h3>
                 <span className="text-[11px] sm:text-xs font-medium text-amber-700 dark:text-amber-300">
-                  3 Scope Options Available
+                  {t.scopeOptionsAvailable}
                 </span>
               </div>
             </div>
@@ -441,24 +498,24 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               {illustrationTier.tagline}
             </p>
 
-            {/* Illustration Scope Sub-selectors */}
+            {/* Illustration Scope Sub-selectors - Touch Friendly */}
             <div className="mt-4 pt-3.5 border-t dark:border-[#38312b] border-[#eee5d8]">
               <label className="block text-[11px] sm:text-xs font-bold dark:text-amber-200 text-stone-800 uppercase tracking-wider mb-2 font-display">
-                Choose Illustration Scope:
+                {t.chooseIllustrationScope}
               </label>
-              <div className="grid grid-cols-3 gap-1 sm:gap-2 p-1.5 rounded-2xl dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#e8dfd5]">
+              <div className="grid grid-cols-3 gap-1.5 p-1 sm:p-1.5 rounded-2xl dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#e8dfd5]">
                 {illustrationScopes.map((scope) => (
                   <button
                     key={scope.id}
                     type="button"
                     onClick={() => setSelectedIllustrationScopeId(scope.id)}
-                    className={`py-2 px-1 text-[10px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
+                    className={`py-2 px-1 text-[10px] sm:text-xs font-bold rounded-xl transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 min-h-[46px] ${
                       selectedIllustrationScopeId === scope.id
-                        ? 'bg-amber-400 text-stone-950 shadow-xs'
+                        ? 'bg-amber-400 text-stone-950 shadow-xs font-black'
                         : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'
                     }`}
                   >
-                    <span className="text-center leading-tight">
+                    <span className="text-center leading-tight line-clamp-1">
                       {scope.emoji} {scope.name.split(' ')[0]}
                     </span>
                     <span className="text-[9px] sm:text-[10px] font-mono opacity-90">
@@ -469,9 +526,14 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               </div>
             </div>
 
-            {/* Large High-Impact Picture Slider for Illustration */}
+            {/* Large High-Impact Picture Slider for Illustration with Touch Swipe */}
             {currentIllustrationImages.length > 0 && (
-              <div className="relative mt-4 rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 h-72 sm:h-96 lg:h-[400px] w-full group/slider shadow-md flex items-center justify-center">
+              <div
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleIllustrationTouchEnd}
+                className="relative mt-4 rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 h-72 sm:h-96 lg:h-[400px] w-full group/slider shadow-md flex items-center justify-center touch-pan-y"
+              >
                 {/* Ambient Blurred Artwork Backdrop */}
                 <img
                   src={
@@ -503,13 +565,13 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
 
                 {/* Sub-Category Badge */}
                 <div className="absolute top-3 left-3 z-20">
-                  <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
+                  <span className="px-2.5 sm:px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] sm:text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
                     <span>{selectedIllustrationScope.emoji}</span>
                     <span>{selectedIllustrationScope.name}</span>
                   </span>
                 </div>
 
-                {/* Zoom Trigger Button */}
+                {/* Zoom Trigger Button - Touch Target >= 40px */}
                 <button
                   type="button"
                   onClick={() =>
@@ -518,11 +580,11 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                       illustrationSlideIndex
                     )
                   }
-                  className="absolute top-3 right-3 z-20 p-2 rounded-xl bg-black/65 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold"
-                  title="Click to Zoom Artwork"
+                  className="absolute top-3 right-3 z-20 p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold active:scale-95"
+                  title={t.zoomSamplePicture}
                 >
                   <ZoomIn className="w-4 h-4" />
-                  <span className="hidden sm:inline text-[11px]">Zoom</span>
+                  <span className="text-[11px] sm:inline">{t.zoom}</span>
                 </button>
 
                 {/* Artwork Title overlay */}
@@ -543,7 +605,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                             : prev - 1
                         );
                       }}
-                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
                       aria-label="Previous artwork image"
                     >
                       <ArrowLeft className="w-4 h-4" />
@@ -558,7 +620,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                             : prev + 1
                         );
                       }}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
                       aria-label="Next artwork image"
                     >
                       <ArrowRight className="w-4 h-4" />
@@ -586,7 +648,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
             )}
 
             {/* Detail Preview Box */}
-            <div className="mt-4 p-4 rounded-2xl dark:bg-[#1f1b18] bg-[#fcf9f5] border dark:border-[#38312b] border-[#e8dfd5] space-y-2.5">
+            <div className="mt-4 p-3.5 sm:p-4 rounded-2xl dark:bg-[#1f1b18] bg-[#fcf9f5] border dark:border-[#38312b] border-[#e8dfd5] space-y-2.5">
               <div className="flex items-baseline justify-between border-b dark:border-[#332c27] border-[#ede5db] pb-2">
                 <div>
                   <span className="text-xs font-bold dark:text-amber-100 text-stone-900 font-display block">
@@ -594,7 +656,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                     {selectedIllustrationScope.name}
                   </span>
                   <span className="text-[10px] text-stone-500 font-medium">
-                    Selected Scope
+                    {t.selectedScope}
                   </span>
                 </div>
                 <div className="text-right">
@@ -613,7 +675,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               <div className="flex items-center gap-1.5 text-xs text-stone-500 font-medium pt-0.5">
                 <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 <span>
-                  Turnaround:{' '}
+                  {t.turnaround}{' '}
                   <strong className="text-stone-800 dark:text-stone-200">
                     {selectedIllustrationScope.turnaroundDays}
                   </strong>
@@ -622,7 +684,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
 
               <div className="pt-2 border-t dark:border-[#332c27] border-[#ede5db]">
                 <div className="text-[10px] font-bold dark:text-amber-300 text-stone-900 uppercase tracking-wider mb-1 font-display">
-                  Scope Deliverables:
+                  {t.scopeDeliverables}
                 </div>
                 <ul className="space-y-1 text-xs dark:text-stone-300 text-stone-700">
                   {selectedIllustrationScope.deliverables.map((deliv, idx) => (
@@ -645,25 +707,25 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 const el = document.getElementById('calculator');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="w-full py-3.5 px-5 rounded-2xl dark:bg-[#2e2722] bg-[#f0e7dc] hover:bg-[#e6dccf] dark:hover:bg-[#38302a] dark:text-amber-200 text-stone-900 font-bold text-xs sm:text-sm border dark:border-[#423932] border-[#ded3c3] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98"
+              className="w-full min-h-[48px] py-3.5 px-5 rounded-2xl dark:bg-[#2e2722] bg-[#f0e7dc] hover:bg-[#e6dccf] dark:hover:bg-[#38302a] dark:text-amber-200 text-stone-900 font-bold text-xs sm:text-sm border dark:border-[#423932] border-[#ded3c3] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98"
             >
-              <span>Calculate & Order Illustration</span>
+              <span>{t.calculateAndOrderIllustration}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Lightbox Zoom Modal with Left/Right Navigation */}
+      {/* Lightbox Zoom Modal with Touch Swipe & Left/Right Navigation */}
       {activeZoomImage && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col justify-between p-3 sm:p-6 animate-fadeIn select-none"
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col justify-between p-2.5 sm:p-6 animate-fadeIn select-none"
         >
           {/* Top Control Bar */}
-          <div className="relative z-10 max-w-5xl mx-auto w-full flex items-center justify-between gap-3 p-2.5 sm:p-3.5 rounded-2xl bg-stone-900/90 border border-stone-800 text-white backdrop-blur-md shadow-2xl">
-            <div className="flex items-center gap-2 min-w-0">
+          <div className="relative z-10 max-w-5xl mx-auto w-full flex items-center justify-between gap-2 p-2 sm:p-3.5 rounded-2xl bg-stone-900/90 border border-stone-800 text-white backdrop-blur-md shadow-2xl">
+            <div className="flex items-center gap-1.5 min-w-0">
               <span className="text-xs sm:text-sm font-bold truncate">
                 {activeZoomImage.title}
               </span>
@@ -679,13 +741,13 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 type="button"
                 onClick={() => setZoomScale((s) => Math.max(s - 0.5, 1))}
                 disabled={zoomScale <= 1}
-                className="p-1.5 sm:p-2 rounded-xl bg-stone-800 hover:bg-stone-700 disabled:opacity-35 text-white transition-colors cursor-pointer"
+                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-stone-800 hover:bg-stone-700 disabled:opacity-35 text-white transition-colors cursor-pointer"
                 title="Zoom Out (-)"
               >
-                <ZoomOut className="w-4 h-4" />
+                <ZoomOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
 
-              <span className="font-mono text-xs w-12 text-center text-amber-300 font-bold">
+              <span className="font-mono text-[11px] sm:text-xs w-10 sm:w-12 text-center text-amber-300 font-bold">
                 {Math.round(zoomScale * 100)}%
               </span>
 
@@ -693,24 +755,16 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 type="button"
                 onClick={() => setZoomScale((s) => Math.min(s + 0.5, 3))}
                 disabled={zoomScale >= 3}
-                className="p-1.5 sm:p-2 rounded-xl bg-stone-800 hover:bg-stone-700 disabled:opacity-35 text-white transition-colors cursor-pointer"
+                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-stone-800 hover:bg-stone-700 disabled:opacity-35 text-white transition-colors cursor-pointer"
                 title="Zoom In (+)"
               >
-                <ZoomIn className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setZoomScale(1)}
-                className="px-2.5 py-1 sm:py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-[11px] font-semibold text-stone-300 transition-colors cursor-pointer"
-              >
-                Reset
+                <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
 
               <button
                 type="button"
                 onClick={handleCloseZoom}
-                className="p-1.5 sm:p-2 rounded-xl bg-stone-800 hover:bg-rose-500 text-white transition-colors cursor-pointer ml-1"
+                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-stone-800 hover:bg-rose-500 text-white transition-colors cursor-pointer ml-1"
                 aria-label="Close Zoom Modal"
               >
                 <X className="w-4 h-4" />
@@ -718,14 +772,19 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
             </div>
           </div>
 
-          {/* Central Image Showcase with Left & Right Buttons */}
-          <div className="relative flex-1 flex items-center justify-center overflow-hidden my-2 sm:my-4">
+          {/* Central Image Showcase with Left & Right Buttons & Touch Swipe */}
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleZoomTouchEnd}
+            className="relative flex-1 flex items-center justify-center overflow-hidden my-2 sm:my-4 touch-pan-y"
+          >
             {/* Left Nav Button */}
             {zoomImageList.length > 1 && (
               <button
                 type="button"
                 onClick={handleZoomPrev}
-                className="absolute left-2 sm:left-6 z-30 p-3 sm:p-4 rounded-full bg-stone-900/80 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-2xl backdrop-blur-md border border-white/10 active:scale-95 group"
+                className="absolute left-1.5 sm:left-6 z-30 w-11 h-11 sm:w-14 sm:h-14 flex items-center justify-center rounded-full bg-stone-900/80 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-2xl backdrop-blur-md border border-white/10 active:scale-95 group"
                 aria-label="Previous artwork image (Left arrow)"
                 title="Previous image (←)"
               >
@@ -740,7 +799,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 transform: `scale(${zoomScale})`,
                 transition: 'transform 0.15s ease-out',
               }}
-              className="max-h-[82vh] max-w-[92vw] object-contain select-none shadow-2xl rounded-xl cursor-default"
+              className="max-h-[75vh] sm:max-h-[82vh] max-w-[94vw] object-contain select-none shadow-2xl rounded-xl cursor-default"
             />
 
             {/* Right Nav Button */}
@@ -748,7 +807,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               <button
                 type="button"
                 onClick={handleZoomNext}
-                className="absolute right-2 sm:right-6 z-30 p-3 sm:p-4 rounded-full bg-stone-900/80 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-2xl backdrop-blur-md border border-white/10 active:scale-95 group"
+                className="absolute right-1.5 sm:right-6 z-30 w-11 h-11 sm:w-14 sm:h-14 flex items-center justify-center rounded-full bg-stone-900/80 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-2xl backdrop-blur-md border border-white/10 active:scale-95 group"
                 aria-label="Next artwork image (Right arrow)"
                 title="Next image (→)"
               >
@@ -758,10 +817,10 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
           </div>
 
           {/* Bottom helper text */}
-          <div className="text-center text-xs text-stone-400 pb-2 flex items-center justify-center gap-3">
-            <span>Use Left/Right buttons (or Arrow Keys) to browse</span>
+          <div className="text-center text-[11px] sm:text-xs text-stone-400 pb-2 flex items-center justify-center gap-2">
+            <span>{lang === 'ID' ? 'Geser layar atau gunakan tombol panah untuk melihat karya lain' : 'Swipe or use arrow buttons to browse'}</span>
             <span aria-hidden="true">·</span>
-            <span>Esc to close</span>
+            <span>Esc / Close</span>
           </div>
         </div>
       )}

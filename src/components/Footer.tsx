@@ -91,7 +91,7 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
                   href={artistProfile.socials.twitter}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-amber-400 hover:text-stone-950 transition-all border border-stone-700 text-xs font-medium"
+                  className="min-h-[40px] px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-amber-400 hover:text-stone-950 transition-all border border-stone-700 text-xs font-medium flex items-center justify-center active:scale-95"
                 >
                   Twitter / X
                 </a>
@@ -99,7 +99,7 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
                   href={artistProfile.socials.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-amber-400 hover:text-stone-950 transition-all border border-stone-700 text-xs font-medium"
+                  className="min-h-[40px] px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-amber-400 hover:text-stone-950 transition-all border border-stone-700 text-xs font-medium flex items-center justify-center active:scale-95"
                 >
                   Instagram
                 </a>

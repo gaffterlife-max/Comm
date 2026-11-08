@@ -398,7 +398,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               </div>
             </div>
 
-            {/* Quantity Counter */}
+            {/* Quantity Counter - Mobile Thumb Friendly */}
             <div className="p-3.5 sm:p-4 dark:bg-[#1a1715] bg-[#faf7f2] rounded-xl sm:rounded-2xl border dark:border-[#38312b] border-[#eee5d8] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="text-xs sm:text-sm font-bold dark:text-amber-100 text-stone-900 font-display">
@@ -417,18 +417,18 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   type="button"
                   aria-label="Decrease count"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 rounded-xl dark:bg-[#2e2722] bg-white hover:bg-amber-100 text-stone-900 dark:text-white font-bold flex items-center justify-center text-xl border dark:border-[#423932] border-[#ded3c3] shadow-xs cursor-pointer active:scale-95"
+                  className="w-12 h-12 min-w-[46px] min-h-[46px] rounded-xl dark:bg-[#2e2722] bg-white hover:bg-amber-100 text-stone-900 dark:text-white font-bold flex items-center justify-center text-2xl border dark:border-[#423932] border-[#ded3c3] shadow-xs cursor-pointer active:scale-95"
                 >
                   -
                 </button>
-                <span className="font-mono text-lg font-bold dark:text-amber-300 text-amber-900 w-8 text-center">
+                <span className="font-mono text-xl font-bold dark:text-amber-300 text-amber-900 w-10 text-center select-none">
                   {quantity}
                 </span>
                 <button
                   type="button"
                   aria-label="Increase count"
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 rounded-xl dark:bg-[#2e2722] bg-white hover:bg-amber-100 text-stone-900 dark:text-white font-bold flex items-center justify-center text-xl border dark:border-[#423932] border-[#ded3c3] shadow-xs cursor-pointer active:scale-95"
+                  className="w-12 h-12 min-w-[46px] min-h-[46px] rounded-xl dark:bg-[#2e2722] bg-white hover:bg-amber-100 text-stone-900 dark:text-white font-bold flex items-center justify-center text-2xl border dark:border-[#423932] border-[#ded3c3] shadow-xs cursor-pointer active:scale-95"
                 >
                   +
                 </button>
@@ -553,9 +553,9 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-3.5 sm:py-4 px-6 rounded-xl sm:rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm tracking-wide transition-all shadow-sm hover:shadow-md hover:scale-101 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full min-h-[50px] py-3.5 sm:py-4 px-6 rounded-xl sm:rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm tracking-wide transition-all shadow-sm hover:shadow-md hover:scale-101 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-4 h-4 shrink-0" />
                 <span>{t.submitInquiry}</span>
               </button>
               <p className="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 text-center mt-2">
@@ -567,7 +567,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
 
         {/* Right Column: Sticky Order Estimate Summary */}
         <div className="lg:col-span-5 lg:sticky lg:top-20 space-y-4">
-          <div className="dark:bg-[#231f1c] bg-white border dark:border-[#38312b] border-[#e8dfd5] rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-md relative overflow-hidden">
+          <div className="dark:bg-[#231f1c] bg-white border dark:border-[#38312b] border-[#e8dfd5] rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between pb-3 sm:pb-4 border-b dark:border-[#38312b] border-[#eee5d8]">
               <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl">🧾</span>
@@ -660,18 +660,18 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                     setTimeout(() => setCopiedSummary(false), 2500);
                   } catch {}
                 }}
-                className="flex-1 py-2.5 sm:py-3 px-3 rounded-xl sm:rounded-2xl dark:bg-[#2a2420] bg-[#faf7f2] hover:bg-amber-100 dark:hover:bg-[#38302a] dark:text-amber-100 text-stone-900 text-xs font-semibold transition-all flex items-center justify-center gap-1.5 border dark:border-[#423932] border-[#ded3c3] cursor-pointer active:scale-98"
+                className="flex-1 min-h-[46px] py-2.5 sm:py-3 px-3 rounded-xl sm:rounded-2xl dark:bg-[#2a2420] bg-[#faf7f2] hover:bg-amber-100 dark:hover:bg-[#38302a] dark:text-amber-100 text-stone-900 text-xs font-semibold transition-all flex items-center justify-center gap-1.5 border dark:border-[#423932] border-[#ded3c3] cursor-pointer active:scale-98"
               >
                 {copiedSummary ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-500" />
-                    <span className="text-emerald-600 dark:text-emerald-400">
+                    <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                       {t.copied}
                     </span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5 text-amber-500" />
+                    <Copy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                     <span>{t.copyForm}</span>
                   </>
                 )}
@@ -690,7 +690,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   URL.revokeObjectURL(url);
                 }}
                 title={t.downloadText}
-                className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl dark:bg-[#2a2420] bg-[#faf7f2] hover:bg-amber-100 dark:hover:bg-[#38302a] text-stone-700 dark:text-stone-300 text-xs font-medium transition-colors border dark:border-[#423932] border-[#ded3c3] cursor-pointer"
+                className="min-h-[46px] min-w-[46px] p-2.5 sm:p-3 rounded-xl sm:rounded-2xl dark:bg-[#2a2420] bg-[#faf7f2] hover:bg-amber-100 dark:hover:bg-[#38302a] text-stone-700 dark:text-stone-300 text-xs font-medium transition-colors border dark:border-[#423932] border-[#ded3c3] cursor-pointer flex items-center justify-center active:scale-95"
               >
                 <Download className="w-4 h-4" />
               </button>
