@@ -183,14 +183,14 @@ export const translations = {
     step3Title: 'Detail Proyek & Informasi Kontak',
     yourName: 'Nama Anda / Pseudonym',
     namePlaceholder: 'contoh: Alex Vance',
-    handleLabel: 'Username Discord atau Twitter/X',
+    handleLabel: 'Username Discord, Instagram, atau Twitter/X',
     handlePlaceholder: 'contoh: @username atau user#1234',
     emailLabel: 'Alamat Email',
     emailPlaceholder: 'nama@contoh.com',
     projectTitleLabel: 'Judul Proyek atau Seri',
     projectTitlePlaceholder: 'contoh: Astral Blade Chapter 3',
     referenceLinksLabel:
-      'Tautan Referensi (Google Drive, Imgur, Pinterest, Toyhouse)',
+      'Tautan Referensi (Google Drive, Imgur, Pinterest)',
     referenceLinksPlaceholder:
       'https://drive.google.com/... atau https://imgur.com/...',
     colorMoodLabel: 'Pengarahan Warna & Pencahayaan',

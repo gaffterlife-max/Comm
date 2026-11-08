@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
                     {artistProfile.name}
                   </h3>
                   <span className="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-semibold">
-                    Open for Commissions
+                    {t.openForCommissions}
                   </span>
                 </div>
                 <p className="text-[11px] sm:text-xs text-amber-300/90 font-medium">
@@ -48,14 +48,18 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
                 {artistProfile.experience}
               </span>
               <span aria-hidden="true">·</span>
-              <span>USD ($) & IDR (Rp) Accepted</span>
+              <span>
+                {lang === 'ID'
+                  ? 'Menerima USD ($) & IDR (Rp)'
+                  : 'USD ($) & IDR (Rp) Accepted'}
+              </span>
             </div>
           </div>
 
           {/* Col 2: Production Setup */}
           <div className="md:col-span-4 space-y-2.5 sm:space-y-3.5">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
-              <span>Production Setup</span>
+              <span>{t.productionSetup}</span>
             </h4>
             <div className="space-y-2 text-xs text-stone-300">
               <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-stone-800/60 border border-stone-700/80">
@@ -72,7 +76,7 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
           {/* Col 3: Contact & Links */}
           <div className="md:col-span-3 space-y-2.5 sm:space-y-3.5">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
-              Contact & Inquiries
+              {t.contactAndInquiries}
             </h4>
             <div className="space-y-2 text-xs">
               <a
@@ -112,18 +116,18 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
           </div>
           <div className="flex flex-wrap justify-center items-center gap-3 text-stone-400 font-medium">
             <a href="#tiers" className="hover:text-amber-400 transition-colors">
-              Rates
+              {t.rates}
             </a>
             <span aria-hidden="true">·</span>
             <a
               href="#calculator"
               className="hover:text-amber-400 transition-colors"
             >
-              Calculator
+              {t.calculator}
             </a>
             <span aria-hidden="true">·</span>
             <a href="#terms" className="hover:text-amber-400 transition-colors">
-              Terms
+              {t.terms}
             </a>
           </div>
         </div>

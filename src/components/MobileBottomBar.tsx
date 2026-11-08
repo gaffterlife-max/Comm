@@ -27,10 +27,12 @@ export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
           />
           <div className="text-left leading-tight">
             <div className="text-[11px] font-bold dark:text-[#fdf9f3] text-stone-900 flex items-center gap-1 font-mono">
-              <span>From {formatCurrency(20, currency)}</span>
+              <span>
+                {t.from} {formatCurrency(20, currency)}
+              </span>
             </div>
             <div className="text-[9px] text-stone-500 dark:text-stone-400 font-medium truncate max-w-[120px]">
-              Manga & Character Art
+              {lang === 'ID' ? 'Mewarnai & Ilustrasi' : 'Manga & Character Art'}
             </div>
           </div>
         </div>

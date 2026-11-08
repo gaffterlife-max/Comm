@@ -4,6 +4,7 @@ import {
   CommissionTerms,
   CurrencyCode,
   CurrencyConfig,
+  Language,
   MainTier,
   PortfolioItem,
   WorkflowStep,
@@ -366,6 +367,54 @@ export const workflowSteps: WorkflowStep[] = [
   },
 ];
 
+export function getWorkflowSteps(lang: Language = 'EN'): WorkflowStep[] {
+  if (lang === 'ID') {
+    return [
+      {
+        step: '01',
+        emoji: '💬',
+        title: 'Pengajuan & Brief Proyek',
+        description:
+          'Pilih layanan yang diinginkan, jumlah halaman, dan jelaskan konsep Anda atau lampirkan gambar referensi menggunakan formulir di atas.',
+        deliverable: 'Konfirmasi estimasi harga & jadwal pengerjaan',
+      },
+      {
+        step: '02',
+        emoji: '📋',
+        title: 'DP & Konfirmasi Slot',
+        description:
+          'DP 50% mengonfirmasi slot Anda dalam jadwal pengerjaan. Berkas lineart diperiksa dan disiapkan untuk diwarnai.',
+        deliverable: 'Jadwal dikonfirmasi & pengerjaan dimulai',
+      },
+      {
+        step: '03',
+        emoji: '🎨',
+        title: 'Draf Warna Dasar & Pencahayaan',
+        description:
+          'Anda menerima draf pengerjaan yang menampilkan warna dasar dan suasana pencahayaan untuk ditinjau dan disesuaikan.',
+        deliverable: 'Peninjauan Tahap 1 (Warna dasar)',
+      },
+      {
+        step: '04',
+        emoji: '✨',
+        title: 'Bayangan & Rendering Suasana',
+        description:
+          'Rendering penuh diselesaikan: bayangan, pencahayaan rim, efek partikel, dan gradasi warna akhir.',
+        deliverable: 'Pratinjau Tahap 2 (Watermark)',
+      },
+      {
+        step: '05',
+        emoji: '📦',
+        title: 'Pelunasan & Pengiriman Berkas',
+        description:
+          'Setelah pratinjau akhir disetujui dan sisa 50% dilunasi, berkas master resolusi tinggi akan dikirimkan via Google Drive.',
+        deliverable: 'Berkas master resolusi tinggi',
+      },
+    ];
+  }
+  return workflowSteps;
+}
+
 export const commissionTerms: CommissionTerms = {
   dos: [
     'Black & white manga pages',
@@ -398,6 +447,44 @@ export const commissionTerms: CommissionTerms = {
     'The artist reserves the right to display completed work in online portfolios unless an NDA is requested.',
   ],
 };
+
+export function getCommissionTerms(lang: Language = 'EN'): CommissionTerms {
+  if (lang === 'ID') {
+    return {
+      dos: [
+        'Halaman manga hitam putih',
+        'Original Character (OC) dengan gambar referensi atau deskripsi visual yang jelas',
+        'Manga genre Action, Fantasy, Romance, Sci-Fi, Gore (nsfw / full gore) dan Slice of Life',
+        'Efek khusus, efek pencahayaan, detail zirah, dan senjata magis',
+        'Interaksi karakter, pose berpasangan, dan komposisi panel dinamis',
+      ],
+      donts: [
+        'Seni Chibi (Chibi Art)',
+        'Konten NSFW eksplisit berlebihan atau ujaran kebencian/SARA',
+        'Proyek NFT / Crypto / Web3',
+        'Pelatihan dataset AI, ingesti model AI, atau scraping gambar',
+        'Meniplak atau memodifikasi karya seniman lain tanpa izin eksplisit',
+      ],
+      paymentRules: [
+        'Klien internasional: Faktur PayPal atau Wise dalam USD ($).',
+        'Klien Indonesia: Transfer Bank langsung (Bank Rakyat Indonesia / BRImo) atau QRIS dalam IDR (Rp).',
+        'DP standar 50% di awal sebelum pengerjaan dimulai; sisa 50% setelah pratinjau akhir disetujui.',
+        'Pengerjaan cepat (rush delivery) tersedia berdasarkan ketersediaan jadwal.',
+      ],
+      revisionRules: [
+        'Mencakup hingga 5 kali revisi di sepanjang tahap sketsa, warna dasar, dan rendering.',
+        'Perubahan kecil rona warna dan pencahayaan sebelum persetujuan akhir bersifat gratis.',
+        'Perubahan signifikan yang diminta setelah persetujuan lineart atau rendering akhir dapat dikenakan biaya tambahan.',
+      ],
+      copyrightRules: [
+        'Penggunaan pribadi: Anda bebas mengunggah karya ke media sosial, menggunakannya sebagai avatar, atau mencetaknya untuk pajangan pribadi.',
+        'Lisensi komersial (! Khusus Ilustrasi !): Tersedia jika Anda berencana menerbitkan buku, menjual merchandise, atau memonetisasi ilustrasi.',
+        'Seniman berhak menampilkan karya yang telah selesai di portofolio online kecuali jika ada perjanjian NDA.',
+      ],
+    };
+  }
+  return commissionTerms;
+}
 
 export const currencyConfigs: Record<CurrencyCode, CurrencyConfig> = {
   USD: {

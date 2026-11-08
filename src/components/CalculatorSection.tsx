@@ -95,26 +95,32 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
     const unitLabel =
       quantity === 1
         ? activeTierId === 'illustration'
-          ? 'piece'
+          ? lang === 'ID'
+            ? 'karya'
+            : 'piece'
           : 'panel'
         : activeTierId === 'illustration'
-          ? 'pieces'
+          ? lang === 'ID'
+            ? 'karya'
+            : 'pieces'
           : 'panels';
+
+    const daySuffix = lang === 'ID' ? 'hari' : 'days';
 
     return {
       totalUSD: total,
       breakdown: [
         {
-          label: `${currentTier.name} — ${currentOption.name} (${quantity} ${unitLabel} @ $${basePrice})`,
+          label: `${currentTier.name} — ${currentOption.name} (${quantity} ${unitLabel} @ ${formatCurrency(basePrice, currency)})`,
           amount: total,
         },
       ],
       estimatedDays:
         currentOption.id === 'double-spread' || currentOption.id === 'full-body'
-          ? `${Math.min(2 * quantity, 10)}–${Math.min(3 * quantity, 14)} days`
-          : `${Math.min(1 * quantity, 7)}–${Math.min(2 * quantity, 14)} days`,
+          ? `${Math.min(2 * quantity, 10)}–${Math.min(3 * quantity, 14)} ${daySuffix}`
+          : `${Math.min(1 * quantity, 7)}–${Math.min(2 * quantity, 14)} ${daySuffix}`,
     };
-  }, [currentTier, currentOption, activeTierId, quantity]);
+  }, [currentTier, currentOption, activeTierId, quantity, lang, currency]);
 
   const handleSelectPackage = (id: string) => {
     setActiveTierId(id);
@@ -125,11 +131,41 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
     const unitLabel =
       quantity === 1
         ? activeTierId === 'illustration'
-          ? 'piece'
+          ? lang === 'ID'
+            ? 'karya'
+            : 'piece'
           : 'panel'
         : activeTierId === 'illustration'
-          ? 'pieces'
+          ? lang === 'ID'
+            ? 'karya'
+            : 'pieces'
           : 'panels';
+
+    if (lang === 'ID') {
+      return [
+        '=============================================',
+        'PENGAJUAN KOMISI UNTUK GAFFTERDUCK',
+        '=============================================',
+        `Paket Layanan: ${currentTier.name}`,
+        `Opsi Dipilih: ${currentOption.name}`,
+        `Jumlah: ${quantity} ${unitLabel}`,
+        '---------------------------------------------',
+        `Estimasi Harga: ${formatCurrency(totalUSD, currency)} (${formatCurrency(
+          totalUSD,
+          'USD'
+        )} USD)`,
+        `Waktu Pengerjaan: ~${estimatedDays}`,
+        '---------------------------------------------',
+        `Nama Klien: ${clientName || 'Tidak diisi'}`,
+        `Username Handle: ${clientHandle || 'Tidak ada'}`,
+        `Email: ${clientEmail || 'Tidak ada'}`,
+        `Judul Proyek: ${projectTitle || 'Tanpa Judul'}`,
+        `Pengarahan Warna/Pencahayaan: ${colorMood || 'Tidak diisi'}`,
+        `Tautan Referensi: ${referenceUrls || 'Akan dikirim via DM/email'}`,
+        `Catatan: ${notes || 'Permintaan komisi standar'}`,
+        '=============================================',
+      ].join('\n');
+    }
 
     return [
       '=============================================',
@@ -160,7 +196,9 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
     e.preventDefault();
     if (!clientName.trim() || !clientEmail.trim()) {
       setFormError(
-        'Please provide your name and email so I can respond to your request.'
+        lang === 'ID'
+          ? 'Mohon isi nama dan alamat email Anda agar saya dapat memproses pesanan Anda.'
+          : 'Please provide your name and email so I can respond to your request.'
       );
       return;
     }
@@ -208,20 +246,18 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-[11px] sm:text-xs font-bold text-amber-900 dark:text-amber-200 mb-2 sm:mb-3 shadow-xs">
             <Calculator className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-            <span>Interactive Price Calculator</span>
+            <span>{t.interactiveCalculator}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight dark:text-amber-50 text-stone-900 font-display">
-            Price Calculator & Inquiry Form
+            {t.calculatorAndFormTitle}
           </h2>
           <p className="mt-2 dark:text-stone-300 text-stone-600 text-xs sm:text-sm sm:text-base max-w-2xl font-normal leading-relaxed">
-            Configure your project options below for an instant estimate in USD ($)
-            or IDR (Rp). Submitting an inquiry allows us to confirm availability
-            and references before any payment.
+            {t.calculatorSubtitle}
           </p>
         </div>
 
         <div className="mt-4 sm:mt-0 text-[11px] sm:text-xs dark:text-stone-400 text-stone-600 flex items-center justify-center sm:justify-start gap-2 font-medium">
-          <span>Rates shown in:</span>
+          <span>{t.ratesShownIn}:</span>
           <span className="font-mono text-[11px] sm:text-xs dark:text-amber-300 text-stone-900 font-bold dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#38312b] border-[#dfd4c7] px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
             {currencyConfigs[currency].label}
           </span>
@@ -234,7 +270,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
           <span className="text-lg">🧾</span>
           <div>
             <div className="text-[10px] font-semibold text-stone-500 dark:text-stone-400">
-              Current Estimate
+              {t.currentEstimate}
             </div>
             <div className="text-xs font-bold dark:text-white text-stone-900">
               {currentTier.name} — {currentOption.name}
@@ -261,7 +297,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                 <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-amber-400 text-stone-950 text-xs flex items-center justify-center font-bold shadow-xs shrink-0">
                   1
                 </span>
-                <span>Select Commission Package</span>
+                <span>{t.step1Title}</span>
               </h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -292,11 +328,11 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                     <div className="mt-3 pt-2.5 border-t dark:border-[#38312b] border-[#eee5d8] flex items-center justify-between">
                       <span className="text-[11px] font-medium text-amber-700 dark:text-amber-300">
                         {tier.id === 'manga-coloring'
-                          ? '3 Panel Styles'
-                          : '3 Artwork Scopes'}
+                          ? t.panelStyles
+                          : t.artworkScopes}
                       </span>
                       <span className="text-xs font-mono font-bold dark:text-amber-300 text-amber-900">
-                        From {formatCurrency(tier.basePriceUSD, currency)}
+                        {t.from} {formatCurrency(tier.basePriceUSD, currency)}
                       </span>
                     </div>
                   </button>
@@ -311,17 +347,15 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-amber-400 text-stone-950 text-xs flex items-center justify-center font-bold shadow-xs shrink-0">
                 2
               </span>
-              <span>Category Option & Quantity</span>
+              <span>{t.step2Title}</span>
             </h3>
 
             {/* Scope / Category Sub-selectors */}
             <div>
               <label className="block text-xs font-bold dark:text-amber-200 text-stone-800 uppercase tracking-wider mb-2 font-display">
-                Select{' '}
                 {activeTierId === 'manga-coloring'
-                  ? 'Panel Category'
-                  : 'Illustration Scope'}
-                :
+                  ? t.selectPanelCategory
+                  : t.selectIllustrationScope}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
                 {(activeTierId === 'manga-coloring'
@@ -369,13 +403,13 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <div>
                 <div className="text-xs sm:text-sm font-bold dark:text-amber-100 text-stone-900 font-display">
                   {activeTierId === 'manga-coloring'
-                    ? 'Number of Panels / Pages'
-                    : 'Number of Artworks / Characters'}
+                    ? t.numberOfPanels
+                    : t.numberOfArtworks}
                 </div>
                 <div className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 font-normal">
                   {activeTierId === 'manga-coloring'
-                    ? 'Select quantity of panels/pages to color'
-                    : 'Select quantity of illustration pieces'}
+                    ? t.selectQuantityPanels
+                    : t.selectQuantityArtworks}
                 </div>
               </div>
               <div className="flex items-center gap-3 self-center sm:self-auto">
@@ -411,7 +445,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-amber-400 text-stone-950 text-xs flex items-center justify-center font-bold shadow-xs shrink-0">
                 3
               </span>
-              <span>Project Brief & Contact Information</span>
+              <span>{t.step3Title}</span>
             </h3>
 
             {formError && (
@@ -424,26 +458,26 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
-                  Your Name / Pseudonym <span className="text-red-500">*</span>
+                  {t.yourName} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  placeholder="e.g. Alex Vance"
+                  placeholder={t.namePlaceholder}
                   className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
                 />
               </div>
               <div>
                 <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
-                  Discord or Twitter/X Handle
+                  {t.handleLabel}
                 </label>
                 <input
                   type="text"
                   value={clientHandle}
                   onChange={(e) => setClientHandle(e.target.value)}
-                  placeholder="e.g. @username or user#1234"
+                  placeholder={t.handlePlaceholder}
                   className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
                 />
               </div>
@@ -452,26 +486,26 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
-                  Email Address <span className="text-red-500">*</span>
+                  {t.emailLabel} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   required
                   value={clientEmail}
                   onChange={(e) => setClientEmail(e.target.value)}
-                  placeholder="name@example.com"
+                  placeholder={t.emailPlaceholder}
                   className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
                 />
               </div>
               <div>
                 <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
-                  Project or Series Title
+                  {t.projectTitleLabel}
                 </label>
                 <input
                   type="text"
                   value={projectTitle}
                   onChange={(e) => setProjectTitle(e.target.value)}
-                  placeholder="e.g. Astral Blade Chapter 3"
+                  placeholder={t.projectTitlePlaceholder}
                   className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
                 />
               </div>
@@ -479,39 +513,39 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
 
             <div>
               <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
-                Reference Links (Google Drive, Imgur, Pinterest, Toyhouse)
+                {t.referenceLinksLabel}
               </label>
               <input
                 type="text"
                 value={referenceUrls}
                 onChange={(e) => setReferenceUrls(e.target.value)}
-                placeholder="https://drive.google.com/... or https://imgur.com/..."
+                placeholder={t.referenceLinksPlaceholder}
                 className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
-                Color & Lighting Direction
+                {t.colorMoodLabel}
               </label>
               <input
                 type="text"
                 value={colorMood}
                 onChange={(e) => setColorMood(e.target.value)}
-                placeholder="e.g. Golden hour sunset, dark moody action with blue fire, pastel daylight"
+                placeholder={t.colorMoodPlaceholder}
                 className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
-                Additional Notes or Deadlines
+                {t.notesLabel}
               </label>
               <textarea
                 rows={3}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Provide any specific requests, character personality details, or target deadlines."
+                placeholder={t.notesPlaceholder}
                 className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors resize-none"
               />
             </div>
@@ -522,11 +556,10 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                 className="w-full py-3.5 sm:py-4 px-6 rounded-xl sm:rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm tracking-wide transition-all shadow-sm hover:shadow-md hover:scale-101 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Send className="w-4 h-4" />
-                <span>Submit Commission Inquiry</span>
+                <span>{t.submitInquiry}</span>
               </button>
               <p className="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 text-center mt-2">
-                Submitting creates an inquiry ticket. We will confirm reference
-                details before any deposit invoice is issued.
+                {t.submitNote}
               </p>
             </div>
           </form>
@@ -539,11 +572,11 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl">🧾</span>
                 <span className="text-xs font-bold dark:text-amber-200 text-stone-900 uppercase tracking-wider font-display">
-                  Order Estimate
+                  {t.orderEstimate}
                 </span>
               </div>
               <span className="text-[11px] sm:text-xs font-mono font-medium dark:text-amber-300 text-amber-800 bg-amber-100 dark:bg-amber-950/60 px-2.5 py-1 rounded-full border border-amber-300/30">
-                Turnaround: ~{estimatedDays}
+                {lang === 'ID' ? 'Pengerjaan:' : 'Turnaround:'} ~{estimatedDays}
               </span>
             </div>
 
@@ -552,7 +585,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-[10px] sm:text-[11px] text-stone-500 font-medium">
-                    Selected Package & Option
+                    {t.selectedPackageAndOption}
                   </div>
                   <div className="text-xs sm:text-sm font-bold dark:text-amber-100 text-stone-900 font-display">
                     {currentTier.emoji} {currentTier.name} ({currentOption.name})
@@ -567,7 +600,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             {/* Itemized Summary */}
             <div className="mt-4 sm:mt-5 space-y-1.5 sm:space-y-2 text-xs">
               <div className="text-[10px] sm:text-[11px] font-bold dark:text-amber-300 text-stone-900 uppercase tracking-wider font-display">
-                Itemized Summary:
+                {t.itemizedSummary}
               </div>
               {breakdown.map((item, idx) => (
                 <div
@@ -589,10 +622,10 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <div className="flex items-end justify-between">
                 <div>
                   <span className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 uppercase tracking-wider block font-display font-bold">
-                    Estimated Total
+                    {t.estimatedTotal}
                   </span>
                   <span className="text-[10px] sm:text-xs dark:text-amber-400 text-amber-700 font-medium">
-                    50% Deposit: {formatCurrency(totalUSD / 2, currency)}
+                    {t.deposit50} {formatCurrency(totalUSD / 2, currency)}
                   </span>
                 </div>
                 <div className="text-right">
@@ -606,20 +639,12 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
             {/* Included highlights */}
             <div className="mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-amber-400/10 dark:bg-amber-400/5 border border-amber-400/25 text-xs space-y-1 sm:space-y-1.5">
               <div className="font-bold dark:text-amber-200 text-stone-900 flex items-center gap-1.5 font-display text-xs">
-                <span>Included with your commission:</span>
+                <span>{t.includedWithCommission}</span>
               </div>
               <ul className="dark:text-stone-300 text-stone-700 space-y-0.5 sm:space-y-1 text-[10px] sm:text-[11px] leading-relaxed">
-                <li>
-                  • Scheduled revision reviews for lineart, base colors &
-                  lighting
-                </li>
-                <li>
-                  • High-resolution master files for web display & printing
-                </li>
-                <li>
-                  • Payment options: PayPal, Wise (USD) or Bank Rakyat Indonesia (Brimo), QRIS
-                  (IDR)
-                </li>
+                <li>{t.includedItem1}</li>
+                <li>{t.includedItem2}</li>
+                <li>{t.includedItem3}</li>
               </ul>
             </div>
 
@@ -641,13 +666,13 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-500" />
                     <span className="text-emerald-600 dark:text-emerald-400">
-                      Copied to Clipboard!
+                      {t.copied}
                     </span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Copy Form for DMs</span>
+                    <span>{t.copyForm}</span>
                   </>
                 )}
               </button>
@@ -664,7 +689,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
-                title="Download as text file"
+                title={t.downloadText}
                 className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl dark:bg-[#2a2420] bg-[#faf7f2] hover:bg-amber-100 dark:hover:bg-[#38302a] text-stone-700 dark:text-stone-300 text-xs font-medium transition-colors border dark:border-[#423932] border-[#ded3c3] cursor-pointer"
               >
                 <Download className="w-4 h-4" />

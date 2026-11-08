@@ -8,7 +8,7 @@ import {
   RefreshCw,
   ShieldCheck,
 } from 'lucide-react';
-import { commissionTerms, workflowSteps } from '../data/commissionData';
+import { getCommissionTerms, getWorkflowSteps } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
 import { Language } from '../types';
 
@@ -20,27 +20,49 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
   lang = 'EN',
 }) => {
   const t = getTranslation(lang);
+  const steps = getWorkflowSteps(lang);
+  const terms = getCommissionTerms(lang);
+
   const [activeTab, setActiveTab] = useState<'workflow' | 'scope' | 'policies'>('workflow');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
-  const faqs = [
-    {
-      q: 'Do I provide finished lineart, or do you draw from scratch?',
-      a: 'Both options are welcome. For Manga Page Coloring, i can provide your high-resolution panel. For Illustrations, I create the entire piece from initial thumbnail sketches to final coloring.',
-    },
-    {
-      q: 'What payment methods and currencies are supported?',
-      a: 'International clients can pay in USD ($) via PayPal or Wise. For clients in Indonesia, I accept IDR (Rp) via direct Bank Transfer or QRIS. Commissions require a standard 50% deposit before work begins, and the remaining 50% upon final preview approval before releasing uncompressed files.',
-    },
-    {
-      q: 'What deliverable file formats and resolutions will I receive?',
-      a: 'All completed work is delivered via a shared Google Drive link. You will receive 144 uncompressed PNG in RGB. And also a layered source files (.CLIP) are available upon request.',
-    },
-    {
-      q: 'How are revisions and color adjustments handled?',
-      a: 'Every commission includes 5 revision throughout the work and also dedicated review check-ins: Stage 1 (base color flats and general lighting mood) and Stage 2 (detailed shading and effects polish). Minor hue and lighting shifts before final approval are complimentary.',
-    },
-  ];
+  const faqs = lang === 'ID'
+    ? [
+        {
+          q: 'Apakah saya perlu menyediakan lineart yang sudah jadi, atau Anda menggambar dari nol?',
+          a: 'Kedua opsi sangat disambut. Untuk Pewarnaan Halaman Manga, Anda dapat menyediakan panel resolusi tinggi Anda. Untuk Ilustrasi, saya membuat seluruh karya dari sketsa awal hingga pewarnaan akhir.',
+        },
+        {
+          q: 'Metode pembayaran dan mata uang apa saja yang didukung?',
+          a: 'Klien internasional dapat membayar dalam USD ($) via PayPal atau Wise. Untuk klien di Indonesia, saya menerima IDR (Rp) melalui Transfer Bank langsung (Bank Rakyat Indonesia / BRImo) atau QRIS. Komisi memerlukan DP standar 50% sebelum pengerjaan dimulai, dan pelunasan 50% setelah persetujuan pratinjau akhir sebelum pengiriman berkas.',
+        },
+        {
+          q: 'Format berkas dan resolusi apa yang akan saya terima?',
+          a: 'Semua hasil akhir dikirimkan melalui tautan Google Drive bersama. Anda akan menerima berkas PNG tanpa kompresi resolusi 144 DPI dalam RGB. Berkas sumber berlapis (.CLIP) juga tersedia atas permintaan.',
+        },
+        {
+          q: 'Bagaimana revisi dan penyesuaian warna ditangani?',
+          a: 'Setiap komisi mencakup 5 kali revisi di sepanjang pengerjaan serta titik peninjauan khusus: Tahap 1 (warna dasar dan pencahayaan umum) dan Tahap 2 (bayangan detail dan efek). Perubahan kecil pada rona warna sebelum persetujuan akhir bersifat gratis.',
+        },
+      ]
+    : [
+        {
+          q: 'Do I provide finished lineart, or do you draw from scratch?',
+          a: 'Both options are welcome. For Manga Page Coloring, i can provide your high-resolution panel. For Illustrations, I create the entire piece from initial thumbnail sketches to final coloring.',
+        },
+        {
+          q: 'What payment methods and currencies are supported?',
+          a: 'International clients can pay in USD ($) via PayPal or Wise. For clients in Indonesia, I accept IDR (Rp) via direct Bank Transfer or QRIS. Commissions require a standard 50% deposit before work begins, and the remaining 50% upon final preview approval before releasing uncompressed files.',
+        },
+        {
+          q: 'What deliverable file formats and resolutions will I receive?',
+          a: 'All completed work is delivered via a shared Google Drive link. You will receive 144 uncompressed PNG in RGB. And also a layered source files (.CLIP) are available upon request.',
+        },
+        {
+          q: 'How are revisions and color adjustments handled?',
+          a: 'Every commission includes 5 revision throughout the work and also dedicated review check-ins: Stage 1 (base color flats and general lighting mood) and Stage 2 (detailed shading and effects polish). Minor hue and lighting shifts before final approval are complimentary.',
+        },
+      ];
 
   return (
     <section
@@ -49,15 +71,13 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
     >
       <div className="mb-8 sm:mb-12 text-center max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold dark:bg-amber-400/15 bg-amber-100 text-amber-900 dark:text-amber-200 border border-amber-400/30 mb-2 sm:mb-3 shadow-xs">
-          <span>Production Pipeline & Terms</span>
+          <span>{t.workflowBadge}</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight dark:text-[#fdf9f3] text-stone-900 font-display">
-          Workflow Pipeline & Guidelines
+          {t.workflowTitle}
         </h2>
         <p className="mt-2 dark:text-stone-300 text-stone-600 text-xs sm:text-sm sm:text-base leading-relaxed">
-          A clear, predictable roadmap from your initial brief to finished
-          artwork, with transparent policies on payment, revisions, and usage
-          rights.
+          {t.workflowSubtitle}
         </p>
       </div>
 
@@ -73,7 +93,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
                 : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'
             }`}
           >
-            5-Step Pipeline
+            {t.tabWorkflow}
           </button>
           <button
             type="button"
@@ -84,7 +104,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
                 : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'
             }`}
           >
-            Accepted & Declined Themes
+            {t.tabTerms}
           </button>
           <button
             type="button"
@@ -95,7 +115,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
                 : 'dark:text-stone-300 text-stone-600 hover:dark:text-white hover:text-stone-900'
             }`}
           >
-            Payment, Revisions & FAQ
+            {t.tabFAQ}
           </button>
         </div>
       </div>
@@ -103,7 +123,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
       {/* Tab 1: 5-Step Pipeline */}
       {activeTab === 'workflow' && (
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3 sm:gap-4">
-          {workflowSteps.map((step, idx) => (
+          {steps.map((step, idx) => (
             <div
               key={step.step}
               className="dark:bg-[#201c19] bg-white border dark:border-[#2e2722] border-stone-200 rounded-2xl sm:rounded-3xl p-4 sm:p-5 flex flex-col justify-between relative hover:shadow-md hover:border-amber-400/60 transition-all group duration-200"
@@ -114,7 +134,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
                     {idx + 1}
                   </span>
                   <span className="text-[10px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-300/40">
-                    Phase {idx + 1}
+                    {lang === 'ID' ? 'Tahap' : 'Phase'} {idx + 1}
                   </span>
                 </div>
                 <h3 className="text-xs sm:text-sm font-bold dark:text-[#fdf9f3] text-stone-900 font-display mb-1.5 sm:mb-2 group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors">
@@ -127,7 +147,7 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
 
               <div className="pt-2.5 sm:pt-3 border-t dark:border-[#2e2722] border-stone-100 text-[10px] sm:text-[11px]">
                 <span className="text-stone-400 dark:text-stone-500 block font-medium">
-                  Deliverable:
+                  {lang === 'ID' ? 'Hasil akhir:' : 'Deliverable:'}
                 </span>
                 <span className="dark:text-amber-300 text-stone-800 font-semibold">
                   {step.deliverable}
@@ -149,15 +169,15 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
               </div>
               <div>
                 <h3 className="text-sm sm:text-base font-bold dark:text-[#fdf9f3] text-stone-900 font-display">
-                  Accepted Themes & Specializations
+                  {t.acceptableRequests}
                 </h3>
                 <span className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 font-normal">
-                  Core creative strengths
+                  {lang === 'ID' ? 'Keahlian utama seniman' : 'Core creative strengths'}
                 </span>
               </div>
             </div>
             <ul className="space-y-2.5 sm:space-y-3.5 text-xs sm:text-sm dark:text-stone-300 text-stone-700">
-              {commissionTerms.dos.map((item, idx) => (
+              {terms.dos.map((item, idx) => (
                 <li key={idx} className="flex items-start gap-2.5 sm:gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-2" />
                   <span className="leading-relaxed">{item}</span>
@@ -174,15 +194,15 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
               </div>
               <div>
                 <h3 className="text-sm sm:text-base font-bold dark:text-[#fdf9f3] text-stone-900 font-display">
-                  Declined Themes & Boundaries
+                  {t.restrictedContent}
                 </h3>
                 <span className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 font-normal">
-                  Firm project boundaries
+                  {lang === 'ID' ? 'Batasan proyek yang tegas' : 'Firm project boundaries'}
                 </span>
               </div>
             </div>
             <ul className="space-y-2.5 sm:space-y-3.5 text-xs sm:text-sm dark:text-stone-300 text-stone-700">
-              {commissionTerms.donts.map((item, idx) => (
+              {terms.donts.map((item, idx) => (
                 <li key={idx} className="flex items-start gap-2.5 sm:gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 mt-2" />
                   <span className="leading-relaxed">{item}</span>
@@ -201,10 +221,10 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
             <div className="dark:bg-[#201c19] bg-white border dark:border-[#2e2722] border-stone-200 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xs">
               <div className="flex items-center gap-2 font-bold dark:text-[#fdf9f3] text-stone-900 text-xs sm:text-sm mb-3 sm:mb-4">
                 <CreditCard className="w-4 h-4 text-amber-500" />
-                <span>Payment & Deposit</span>
+                <span>{t.paymentTerms}</span>
               </div>
               <ul className="space-y-2 text-[11px] sm:text-xs dark:text-stone-300 text-stone-700">
-                {commissionTerms.paymentRules.map((rule, idx) => (
+                {terms.paymentRules.map((rule, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">•</span>
                     <span className="leading-relaxed">{rule}</span>
@@ -217,10 +237,10 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
             <div className="dark:bg-[#201c19] bg-white border dark:border-[#2e2722] border-stone-200 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xs">
               <div className="flex items-center gap-2 font-bold dark:text-[#fdf9f3] text-stone-900 text-xs sm:text-sm mb-3 sm:mb-4">
                 <RefreshCw className="w-4 h-4 text-amber-500" />
-                <span>Revisions & Milestone Reviews</span>
+                <span>{t.revisionsPolicy}</span>
               </div>
               <ul className="space-y-2 text-[11px] sm:text-xs dark:text-stone-300 text-stone-700">
-                {commissionTerms.revisionRules.map((rule, idx) => (
+                {terms.revisionRules.map((rule, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">•</span>
                     <span className="leading-relaxed">{rule}</span>
@@ -233,10 +253,10 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
             <div className="dark:bg-[#201c19] bg-white border dark:border-[#2e2722] border-stone-200 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xs">
               <div className="flex items-center gap-2 font-bold dark:text-[#fdf9f3] text-stone-900 text-xs sm:text-sm mb-3 sm:mb-4">
                 <ShieldCheck className="w-4 h-4 text-amber-500" />
-                <span>Usage Rights & Copyright</span>
+                <span>{t.copyrightLicensing}</span>
               </div>
               <ul className="space-y-2 text-[11px] sm:text-xs dark:text-stone-300 text-stone-700">
-                {commissionTerms.copyrightRules.map((rule, idx) => (
+                {terms.copyrightRules.map((rule, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">•</span>
                     <span className="leading-relaxed">{rule}</span>
@@ -251,7 +271,9 @@ export const WorkflowTermsSection: React.FC<WorkflowTermsSectionProps> = ({
             <div className="flex items-center gap-2 mb-4 sm:mb-6">
               <CircleHelp className="w-5 h-5 text-amber-500" />
               <h3 className="text-base sm:text-lg font-bold dark:text-[#fdf9f3] text-stone-900 font-display">
-                Frequently Asked Questions
+                {lang === 'ID'
+                  ? 'Pertanyaan Umum (FAQ)'
+                  : 'Frequently Asked Questions'}
               </h3>
             </div>
             <div className="space-y-2 sm:space-y-3">
