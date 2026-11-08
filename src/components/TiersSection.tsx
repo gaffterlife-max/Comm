@@ -29,6 +29,7 @@ interface TiersSectionProps {
 interface SampleImage {
   title: string;
   image: string;
+  aspectRatio?: number; // width / height
 }
 
 const mangaSamples: Record<string, SampleImage[]> = {
@@ -36,66 +37,81 @@ const mangaSamples: Record<string, SampleImage[]> = {
     {
       title: 'World Hater Majik',
       image: '/assets/images/whm ichi the magic full panel.jpg',
+      aspectRatio: 1200 / 1800, // 0.667 (2:3)
     },
     {
       title: 'Hild',
       image: '/assets/images/vinland saga full panel.jpg',
+      aspectRatio: 2355 / 3366, // 0.700
     },
     {
       title: 'Julian',
       image: '/assets/images/julian full panel.jpg',
+      aspectRatio: 2400 / 3444, // 0.697
     },
     {
       title: 'Frieren',
       image: '/assets/images/frieren full panel.jpg',
+      aspectRatio: 1067 / 1600, // 0.667
     },
     {
       title: 'Shidou',
       image: '/assets/images/shidou ful panel.jpg',
+      aspectRatio: 3840 / 5512, // 0.697
     },
   ],
   'character-focused-panel': [
     {
       title: 'Teddy',
       image: '/assets/images/teddy cfp1.jpg',
+      aspectRatio: 2648 / 3302, // 0.802
     },
     {
       title: 'Loki',
       image: '/assets/images/loki cfp.jpg',
+      aspectRatio: 1667 / 1546, // 1.078
     },
     {
       title: 'Isagi',
       image: '/assets/images/isagi yoichi cfp2.jpg',
+      aspectRatio: 2739 / 3668, // 0.747
     },
     {
       title: 'Teddy',
       image: '/assets/images/teddy cfp2.jpg',
+      aspectRatio: 3840 / 3302, // 1.163
     },
     {
       title: 'Isagi',
       image: '/assets/images/isagi yoichi cfp3.jpg',
+      aspectRatio: 3470 / 3877, // 0.895
     },
   ],
   'double-spread': [
     {
       title: 'Isagi Vs Hugo',
       image: '/assets/images/hugo vs isagi spread.jpg',
+      aspectRatio: 4167 / 2991, // 1.393
     },
     {
       title: 'Sun Ken Rock',
       image: '/assets/images/sun ken rock spread.jpg',
+      aspectRatio: 4266 / 3080, // 1.385
     },
     {
       title: 'Asta the Wizard King',
       image: '/assets/images/asta spread.jpg',
+      aspectRatio: 3136 / 2290, // 1.369
     },
     {
       title: 'Nagi',
       image: '/assets/images/Nuts1.png',
+      aspectRatio: 2950 / 2197, // 1.343
     },
     {
       title: 'Rin Goal',
       image: '/assets/images/RINchan.jpg',
+      aspectRatio: 10000 / 7176, // 1.393
     },
   ],
 };
@@ -105,34 +121,41 @@ const illustrationSamples: Record<string, SampleImage[]> = {
     {
       title: 'NG11 Fanart · Bust',
       image: '/assets/images/ng11 fanart bust.jpg',
+      aspectRatio: 3360 / 1822, // 1.844
     },
     {
       title: 'Rin Fanart · Bust',
       image: '/assets/images/rin fanart bust.jpg',
+      aspectRatio: 2532 / 3426, // 0.739
     },
     {
       title: 'Teddy Fanart · Headshot',
       image: '/assets/images/teddy fanart headshot.jpg',
+      aspectRatio: 4220 / 3211, // 1.314
     },
   ],
   'half-body': [
     {
       title: 'Hugo Fanart · Half-Body',
       image: '/assets/images/hugo fanart.jpg',
+      aspectRatio: 3001 / 4192, // 0.716
     },
     {
       title: 'Isagi Yoichi Fanart · Half-Body',
       image: '/assets/images/isagi yoichi fanart1.jpg',
+      aspectRatio: 4211 / 2988, // 1.409
     },
   ],
   'full-body': [
     {
       title: 'Teddy Fanart · Full-Body',
       image: '/assets/images/teddy fanart full body.jpg',
+      aspectRatio: 3119 / 2205, // 1.414
     },
     {
       title: 'Celestial Seraph · Full-Body Showcase',
       image: '/assets/images/character_illustration_showcase_1793799152713.jpg',
+      aspectRatio: 896 / 1200, // 0.747
     },
   ],
 };
@@ -150,6 +173,17 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
 
   const [mangaSlideIndex, setMangaSlideIndex] = useState(0);
   const [illustrationSlideIndex, setIllustrationSlideIndex] = useState(0);
+
+  // Dynamic aspect ratio cache for images detected on load
+  const [dynamicRatios, setDynamicRatios] = useState<Record<string, number>>({});
+
+  const handleImageLoad = (imgSrc: string, e: React.SyntheticEvent<HTMLImageElement>) => {
+    const { naturalWidth, naturalHeight } = e.currentTarget;
+    if (naturalWidth && naturalHeight) {
+      const ratio = naturalWidth / naturalHeight;
+      setDynamicRatios((prev) => (prev[imgSrc] === ratio ? prev : { ...prev, [imgSrc]: ratio }));
+    }
+  };
 
   // Swipe handling for touch devices
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -186,6 +220,22 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
   const currentMangaImages = mangaSamples[selectedMangaCatId] || [];
   const currentIllustrationImages =
     illustrationSamples[selectedIllustrationScopeId] || [];
+
+  const currentMangaItem =
+    currentMangaImages[mangaSlideIndex] || currentMangaImages[0];
+  const currentMangaRatio =
+    (currentMangaItem &&
+      (currentMangaItem.aspectRatio || dynamicRatios[currentMangaItem.image])) ||
+    (selectedMangaCatId === 'double-spread' ? 1.39 : 0.7);
+
+  const currentIllustrationItem =
+    currentIllustrationImages[illustrationSlideIndex] ||
+    currentIllustrationImages[0];
+  const currentIllustrationRatio =
+    (currentIllustrationItem &&
+      (currentIllustrationItem.aspectRatio ||
+        dynamicRatios[currentIllustrationItem.image])) ||
+    1;
 
   const handleOpenZoom = (images: SampleImage[], initialIdx: number) => {
     setZoomImageList(images);
@@ -357,108 +407,115 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               </div>
             </div>
 
-            {/* Large High-Impact Picture Slider for Manga Coloring with Touch Swipe */}
-            {currentMangaImages.length > 0 && (
-              <div
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleMangaTouchEnd}
-                className="relative mt-4 rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 h-72 sm:h-96 lg:h-[400px] w-full group/slider shadow-md flex items-center justify-center touch-pan-y"
-              >
-                {/* Ambient Blurred Artwork Backdrop */}
-                <img
-                  src={currentMangaImages[mangaSlideIndex]?.image}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
-                />
-
-                {/* Main Foreground Artwork */}
-                <img
-                  src={currentMangaImages[mangaSlideIndex]?.image}
-                  alt={currentMangaImages[mangaSlideIndex]?.title}
-                  className="relative z-10 max-h-full max-w-full object-contain select-none transition-transform duration-300 group-hover/slider:scale-[1.015] cursor-zoom-in drop-shadow-2xl"
-                  onClick={() =>
-                    handleOpenZoom(currentMangaImages, mangaSlideIndex)
-                  }
-                />
-
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none z-10" />
-
-                {/* Sub-Category Badge */}
-                <div className="absolute top-3 left-3 z-20">
-                  <span className="px-2.5 sm:px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] sm:text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
-                    <span>{selectedMangaCat.emoji}</span>
-                    <span>{selectedMangaCat.name}</span>
-                  </span>
-                </div>
-
-                {/* Zoom Trigger Button - Touch Target >= 40px */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleOpenZoom(currentMangaImages, mangaSlideIndex)
-                  }
-                  className="absolute top-3 right-3 z-20 p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold active:scale-95"
-                  title={t.zoomSamplePicture}
+            {/* Dynamic Aspect Ratio Picture Slider for Manga Coloring with Touch Swipe */}
+            {currentMangaImages.length > 0 && currentMangaItem && (
+              <div className="mt-4 w-full flex items-center justify-center">
+                <div
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleMangaTouchEnd}
+                  style={{
+                    aspectRatio: `${currentMangaRatio}`,
+                    width: `min(100%, calc(var(--slider-max-h, 450px) * ${currentMangaRatio}))`,
+                  }}
+                  className="relative rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 group/slider shadow-md flex items-center justify-center touch-pan-y transition-all duration-300 ease-out max-w-full [--slider-max-h:340px] sm:[--slider-max-h:450px]"
                 >
-                  <ZoomIn className="w-4 h-4" />
-                  <span className="text-[11px] sm:inline">{t.zoom}</span>
-                </button>
+                  {/* Ambient Blurred Artwork Backdrop */}
+                  <img
+                    src={currentMangaItem.image}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                  />
 
-                {/* Artwork Title overlay */}
-                <div className="absolute bottom-3 left-3 right-20 z-20 text-white text-xs sm:text-sm font-bold truncate pointer-events-none drop-shadow-md">
-                  {currentMangaImages[mangaSlideIndex]?.title}
+                  {/* Main Foreground Artwork */}
+                  <img
+                    src={currentMangaItem.image}
+                    alt={currentMangaItem.title}
+                    onLoad={(e) => handleImageLoad(currentMangaItem.image, e)}
+                    className="relative z-10 w-full h-full object-contain select-none transition-transform duration-300 group-hover/slider:scale-[1.015] cursor-zoom-in drop-shadow-2xl"
+                    onClick={() =>
+                      handleOpenZoom(currentMangaImages, mangaSlideIndex)
+                    }
+                  />
+
+                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none z-10" />
+
+                  {/* Sub-Category Badge */}
+                  <div className="absolute top-2.5 left-2.5 z-20">
+                    <span className="px-2.5 sm:px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[10px] sm:text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
+                      <span>{selectedMangaCat.emoji}</span>
+                      <span>{selectedMangaCat.name}</span>
+                    </span>
+                  </div>
+
+                  {/* Zoom Trigger Button - Touch Target >= 40px */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleOpenZoom(currentMangaImages, mangaSlideIndex)
+                    }
+                    className="absolute top-2.5 right-2.5 z-20 p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold active:scale-95"
+                    title={t.zoomSamplePicture}
+                  >
+                    <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span className="text-[10px] sm:text-[11px] sm:inline">{t.zoom}</span>
+                  </button>
+
+                  {/* Artwork Title overlay */}
+                  <div className="absolute bottom-2.5 left-2.5 right-20 z-20 text-white text-[11px] sm:text-xs font-bold truncate pointer-events-none drop-shadow-md">
+                    {currentMangaItem.title}
+                  </div>
+
+                  {/* Prev / Next Controls if multiple pictures */}
+                  {currentMangaImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMangaSlideIndex((prev) =>
+                            prev === 0 ? currentMangaImages.length - 1 : prev - 1
+                          );
+                        }}
+                        className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                        aria-label="Previous artwork image"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMangaSlideIndex((prev) =>
+                            prev === currentMangaImages.length - 1 ? 0 : prev + 1
+                          );
+                        }}
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                        aria-label="Next artwork image"
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+
+                      {/* Dots indicator */}
+                      <div className="absolute bottom-2.5 right-2.5 z-20 flex items-center gap-1.5 bg-black/50 px-2 py-1 rounded-full backdrop-blur-xs">
+                        {currentMangaImages.map((_, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setMangaSlideIndex(idx)}
+                            aria-label={`Slide ${idx + 1}`}
+                            className={`h-1.5 sm:h-2 rounded-full transition-all cursor-pointer ${
+                              idx === mangaSlideIndex
+                                ? 'w-4 sm:w-5 bg-amber-400'
+                                : 'w-1.5 sm:w-2 bg-white/50 hover:bg-white'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
-
-                {/* Prev / Next Controls if multiple pictures */}
-                {currentMangaImages.length > 1 && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setMangaSlideIndex((prev) =>
-                          prev === 0 ? currentMangaImages.length - 1 : prev - 1
-                        );
-                      }}
-                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
-                      aria-label="Previous artwork image"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setMangaSlideIndex((prev) =>
-                          prev === currentMangaImages.length - 1 ? 0 : prev + 1
-                        );
-                      }}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
-                      aria-label="Next artwork image"
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-
-                    {/* Dots indicator */}
-                    <div className="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 bg-black/50 px-2 py-1 rounded-full backdrop-blur-xs">
-                      {currentMangaImages.map((_, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setMangaSlideIndex(idx)}
-                          aria-label={`Slide ${idx + 1}`}
-                          className={`h-2 rounded-full transition-all cursor-pointer ${
-                            idx === mangaSlideIndex
-                              ? 'w-5 bg-amber-400'
-                              : 'w-2 bg-white/50 hover:bg-white'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
               </div>
             )}
 
@@ -578,124 +635,125 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
               </div>
             </div>
 
-            {/* Large High-Impact Picture Slider for Illustration with Touch Swipe */}
-            {currentIllustrationImages.length > 0 && (
-              <div
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleIllustrationTouchEnd}
-                className="relative mt-4 rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 h-72 sm:h-96 lg:h-[400px] w-full group/slider shadow-md flex items-center justify-center touch-pan-y"
-              >
-                {/* Ambient Blurred Artwork Backdrop */}
-                <img
-                  src={
-                    currentIllustrationImages[illustrationSlideIndex]?.image
-                  }
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
-                />
-
-                {/* Main Foreground Artwork */}
-                <img
-                  src={
-                    currentIllustrationImages[illustrationSlideIndex]?.image
-                  }
-                  alt={
-                    currentIllustrationImages[illustrationSlideIndex]?.title
-                  }
-                  className="relative z-10 max-h-full max-w-full object-contain select-none transition-transform duration-300 group-hover/slider:scale-[1.015] cursor-zoom-in drop-shadow-2xl"
-                  onClick={() =>
-                    handleOpenZoom(
-                      currentIllustrationImages,
-                      illustrationSlideIndex
-                    )
-                  }
-                />
-
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none z-10" />
-
-                {/* Sub-Category Badge */}
-                <div className="absolute top-3 left-3 z-20">
-                  <span className="px-2.5 sm:px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] sm:text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
-                    <span>{selectedIllustrationScope.emoji}</span>
-                    <span>{selectedIllustrationScope.name}</span>
-                  </span>
-                </div>
-
-                {/* Zoom Trigger Button - Touch Target >= 40px */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleOpenZoom(
-                      currentIllustrationImages,
-                      illustrationSlideIndex
-                    )
-                  }
-                  className="absolute top-3 right-3 z-20 p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold active:scale-95"
-                  title={t.zoomSamplePicture}
+            {/* Dynamic Aspect Ratio Picture Slider for Illustration with Touch Swipe */}
+            {currentIllustrationImages.length > 0 && currentIllustrationItem && (
+              <div className="mt-4 w-full flex items-center justify-center">
+                <div
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleIllustrationTouchEnd}
+                  style={{
+                    aspectRatio: `${currentIllustrationRatio}`,
+                    width: `min(100%, calc(var(--slider-max-h, 450px) * ${currentIllustrationRatio}))`,
+                  }}
+                  className="relative rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 group/slider shadow-md flex items-center justify-center touch-pan-y transition-all duration-300 ease-out max-w-full [--slider-max-h:340px] sm:[--slider-max-h:450px]"
                 >
-                  <ZoomIn className="w-4 h-4" />
-                  <span className="text-[11px] sm:inline">{t.zoom}</span>
-                </button>
+                  {/* Ambient Blurred Artwork Backdrop */}
+                  <img
+                    src={currentIllustrationItem.image}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                  />
 
-                {/* Artwork Title overlay */}
-                <div className="absolute bottom-3 left-3 right-20 z-20 text-white text-xs sm:text-sm font-bold truncate pointer-events-none drop-shadow-md">
-                  {currentIllustrationImages[illustrationSlideIndex]?.title}
+                  {/* Main Foreground Artwork */}
+                  <img
+                    src={currentIllustrationItem.image}
+                    alt={currentIllustrationItem.title}
+                    onLoad={(e) => handleImageLoad(currentIllustrationItem.image, e)}
+                    className="relative z-10 w-full h-full object-contain select-none transition-transform duration-300 group-hover/slider:scale-[1.015] cursor-zoom-in drop-shadow-2xl"
+                    onClick={() =>
+                      handleOpenZoom(
+                        currentIllustrationImages,
+                        illustrationSlideIndex
+                      )
+                    }
+                  />
+
+                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none z-10" />
+
+                  {/* Sub-Category Badge */}
+                  <div className="absolute top-2.5 left-2.5 z-20">
+                    <span className="px-2.5 sm:px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[10px] sm:text-xs font-extrabold tracking-wide shadow-md flex items-center gap-1.5 font-display">
+                      <span>{selectedIllustrationScope.emoji}</span>
+                      <span>{selectedIllustrationScope.name}</span>
+                    </span>
+                  </div>
+
+                  {/* Zoom Trigger Button - Touch Target >= 40px */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleOpenZoom(
+                        currentIllustrationImages,
+                        illustrationSlideIndex
+                      )
+                    }
+                    className="absolute top-2.5 right-2.5 z-20 p-2 sm:p-2.5 rounded-xl bg-black/75 hover:bg-amber-400 hover:text-stone-950 text-white transition-all backdrop-blur-md shadow-md cursor-pointer flex items-center gap-1 text-xs font-semibold active:scale-95"
+                    title={t.zoomSamplePicture}
+                  >
+                    <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span className="text-[10px] sm:text-[11px] sm:inline">{t.zoom}</span>
+                  </button>
+
+                  {/* Artwork Title overlay */}
+                  <div className="absolute bottom-2.5 left-2.5 right-20 z-20 text-white text-[11px] sm:text-xs font-bold truncate pointer-events-none drop-shadow-md">
+                    {currentIllustrationItem.title}
+                  </div>
+
+                  {/* Prev / Next Controls if multiple pictures */}
+                  {currentIllustrationImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIllustrationSlideIndex((prev) =>
+                            prev === 0
+                              ? currentIllustrationImages.length - 1
+                              : prev - 1
+                          );
+                        }}
+                        className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                        aria-label="Previous artwork image"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIllustrationSlideIndex((prev) =>
+                            prev === currentIllustrationImages.length - 1
+                              ? 0
+                              : prev + 1
+                          );
+                        }}
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
+                        aria-label="Next artwork image"
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+
+                      {/* Dots indicator */}
+                      <div className="absolute bottom-2.5 right-2.5 z-20 flex items-center gap-1.5 bg-black/50 px-2 py-1 rounded-full backdrop-blur-xs">
+                        {currentIllustrationImages.map((_, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setIllustrationSlideIndex(idx)}
+                            aria-label={`Slide ${idx + 1}`}
+                            className={`h-1.5 sm:h-2 rounded-full transition-all cursor-pointer ${
+                              idx === illustrationSlideIndex
+                                ? 'w-4 sm:w-5 bg-amber-400'
+                                : 'w-1.5 sm:w-2 bg-white/50 hover:bg-white'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
-
-                {/* Prev / Next Controls if multiple pictures */}
-                {currentIllustrationImages.length > 1 && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIllustrationSlideIndex((prev) =>
-                          prev === 0
-                            ? currentIllustrationImages.length - 1
-                            : prev - 1
-                        );
-                      }}
-                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
-                      aria-label="Previous artwork image"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIllustrationSlideIndex((prev) =>
-                          prev === currentIllustrationImages.length - 1
-                            ? 0
-                            : prev + 1
-                        );
-                      }}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 hover:bg-amber-400 hover:text-stone-950 text-white transition-all cursor-pointer shadow-lg active:scale-95 border border-white/10"
-                      aria-label="Next artwork image"
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-
-                    {/* Dots indicator */}
-                    <div className="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 bg-black/50 px-2 py-1 rounded-full backdrop-blur-xs">
-                      {currentIllustrationImages.map((_, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setIllustrationSlideIndex(idx)}
-                          aria-label={`Slide ${idx + 1}`}
-                          className={`h-2 rounded-full transition-all cursor-pointer ${
-                            idx === illustrationSlideIndex
-                              ? 'w-5 bg-amber-400'
-                              : 'w-2 bg-white/50 hover:bg-white'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
               </div>
             )}
 

@@ -115,10 +115,10 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
           amount: total,
         },
       ],
-      estimatedDays:
-        currentOption.id === 'double-spread' || currentOption.id === 'full-body'
-          ? `${Math.min(2 * quantity, 10)}–${Math.min(3 * quantity, 14)} ${daySuffix}`
-          : `${Math.min(1 * quantity, 7)}–${Math.min(2 * quantity, 14)} ${daySuffix}`,
+      estimatedDays: `${Math.min(1 * quantity, 7)}–${Math.min(
+        2 * quantity,
+        14
+      )} ${daySuffix}`,
     };
   }, [currentTier, currentOption, activeTierId, quantity, lang, currency]);
 
