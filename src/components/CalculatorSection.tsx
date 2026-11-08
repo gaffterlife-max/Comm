@@ -11,6 +11,8 @@ import {
   commissionTiers,
   currencyConfigs,
   formatCurrency,
+  getOptionPrice,
+  getTierBasePrice,
   illustrationScopes,
   mangaPanelCategories,
 } from '../data/commissionData';
@@ -89,9 +91,10 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
     [activeTierId, selectedMangaCatId, selectedIllustrationScopeId]
   );
 
-  const { totalUSD, breakdown, estimatedDays } = useMemo(() => {
-    const basePrice = currentOption.priceUSD;
-    const total = basePrice * quantity;
+  const { totalAmount, totalUSD, breakdown, estimatedDays } = useMemo(() => {
+    const unitPrice = getOptionPrice(currentOption, currency);
+    const total = unitPrice * quantity;
+    const usdTotal = currentOption.priceUSD * quantity;
     const unitLabel =
       quantity === 1
         ? activeTierId === 'illustration'
@@ -108,10 +111,11 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
     const daySuffix = lang === 'ID' ? 'hari' : 'days';
 
     return {
-      totalUSD: total,
+      totalAmount: total,
+      totalUSD: usdTotal,
       breakdown: [
         {
-          label: `${currentTier.name} — ${currentOption.name} (${quantity} ${unitLabel} @ ${formatCurrency(basePrice, currency)})`,
+          label: `${currentTier.name} — ${currentOption.name} (${quantity} ${unitLabel} @ ${formatCurrency(unitPrice, currency)})`,
           amount: total,
         },
       ],
@@ -150,7 +154,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
         `Opsi Dipilih: ${currentOption.name}`,
         `Jumlah: ${quantity} ${unitLabel}`,
         '---------------------------------------------',
-        `Estimasi Harga: ${formatCurrency(totalUSD, currency)} (${formatCurrency(
+        `Estimasi Harga: ${formatCurrency(totalAmount, currency)} (${formatCurrency(
           totalUSD,
           'USD'
         )} USD)`,
@@ -175,7 +179,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
       `Selected Option: ${currentOption.name}`,
       `Quantity: ${quantity} ${unitLabel}`,
       '---------------------------------------------',
-      `Estimated Rate: ${formatCurrency(totalUSD, currency)} (${formatCurrency(
+      `Estimated Rate: ${formatCurrency(totalAmount, currency)} (${formatCurrency(
         totalUSD,
         'USD'
       )} USD)`,
@@ -210,6 +214,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
       categoryOption: currentOption,
       pageCount: quantity,
       totalUSD: totalUSD,
+      totalAmount: totalAmount,
       currency: currency,
       clientName: clientName,
       clientHandle: clientHandle,
@@ -279,7 +284,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
         </div>
         <div className="text-right">
           <div className="text-base font-bold font-mono text-amber-700 dark:text-amber-300">
-            {formatCurrency(totalUSD, currency)}
+            {formatCurrency(totalAmount, currency)}
           </div>
           <div className="text-[10px] text-stone-500 font-mono">
             ~{estimatedDays}
@@ -332,7 +337,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                           : t.artworkScopes}
                       </span>
                       <span className="text-xs font-mono font-bold dark:text-amber-300 text-amber-900">
-                        {t.from} {formatCurrency(tier.basePriceUSD, currency)}
+                        {t.from} {formatCurrency(getTierBasePrice(tier, currency), currency)}
                       </span>
                     </div>
                   </button>
@@ -390,7 +395,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                         </div>
                       </div>
                       <div className="mt-2 pt-2 border-t dark:border-[#38312b] border-[#eee5d8] font-mono text-xs font-bold text-amber-700 dark:text-amber-300">
-                        {formatCurrency(opt.priceUSD, currency)}
+                        {formatCurrency(getOptionPrice(opt, currency), currency)}
                       </div>
                     </button>
                   );
@@ -592,7 +597,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                   </div>
                 </div>
                 <div className="text-right font-mono text-xs font-bold dark:text-amber-300 text-amber-900">
-                  {formatCurrency(currentOption.priceUSD, currency)}
+                  {formatCurrency(getOptionPrice(currentOption, currency), currency)}
                 </div>
               </div>
             </div>
@@ -625,12 +630,12 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                     {t.estimatedTotal}
                   </span>
                   <span className="text-[10px] sm:text-xs dark:text-amber-400 text-amber-700 font-medium">
-                    {t.deposit50} {formatCurrency(totalUSD / 2, currency)}
+                    {t.deposit50} {formatCurrency(totalAmount / 2, currency)}
                   </span>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl sm:text-3xl font-extrabold font-mono dark:text-amber-300 text-amber-900 tabular-nums">
-                    {formatCurrency(totalUSD, currency)}
+                    {formatCurrency(totalAmount, currency)}
                   </div>
                 </div>
               </div>

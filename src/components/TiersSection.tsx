@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -14,6 +14,7 @@ import {
 import {
   commissionTiers,
   formatCurrency,
+  getOptionPrice,
   illustrationScopes,
   mangaPanelCategories,
 } from '../data/commissionData';
@@ -111,7 +112,7 @@ const mangaSamples: Record<string, SampleImage[]> = {
     {
       title: 'Rin vs Loki',
       image: '/assets/images/Barely.jpg',
-      aspectRatio: 10000 / 7176, // 1.393
+      aspectRatio: 6966 / 5000, // 1.393
     },
   ],
 };
@@ -121,12 +122,12 @@ const illustrationSamples: Record<string, SampleImage[]> = {
     {
       title: 'Isagi',
       image: '/assets/images/1000074271.jpg',
-      aspectRatio: 3360 / 1822, // 1.844
+      aspectRatio: 2619 / 3186, // 0.822
     },
     {
       title: 'Kaneki',
       image: '/assets/images/kneki.png',
-      aspectRatio: 2532 / 3426, // 0.739
+      aspectRatio: 1336 / 1567, // 0.853
     },
   ],
   'half-body': [
@@ -138,7 +139,12 @@ const illustrationSamples: Record<string, SampleImage[]> = {
     {
       title: 'Rin',
       image: '/assets/images/rin fanart bust.jpg',
-      aspectRatio: 4211 / 2988, // 1.409
+      aspectRatio: 2532 / 3426, // 0.739
+    },
+    {
+      title: 'NG 11 WC 2026',
+      image: '/assets/images/ng11 fanart bust.jpg',
+      aspectRatio: 3360 / 1822, // 1.844
     },
   ],
   'full-body': [
@@ -180,9 +186,9 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
     }
   };
 
-  // Swipe handling for touch devices
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  // Swipe handling for touch devices using useRef to avoid re-rendering on touch moves
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
 
   // Zoom lightbox state with gallery navigation
   const [zoomImageList, setZoomImageList] = useState<SampleImage[]>([]);
@@ -258,19 +264,21 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
     setZoomScale(1);
   };
 
-  // Generic touch swipe gesture handlers
+  // High-performance touch swipe gesture handlers (no React re-renders on move)
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchEndX(null);
-    setTouchStartX(e.targetTouches[0].clientX);
+    touchStartXRef.current = e.targetTouches[0].clientX;
+    touchEndXRef.current = null;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
+    touchEndXRef.current = e.targetTouches[0].clientX;
   };
 
   const handleMangaTouchEnd = () => {
-    if (!touchStartX || !touchEndX || currentMangaImages.length <= 1) return;
-    const distance = touchStartX - touchEndX;
+    const start = touchStartXRef.current;
+    const end = touchEndXRef.current;
+    if (start === null || end === null || currentMangaImages.length <= 1) return;
+    const distance = start - end;
     if (distance > 45) {
       // Swiped Left -> Next
       setMangaSlideIndex((prev) => (prev + 1) % currentMangaImages.length);
@@ -283,8 +291,10 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
   };
 
   const handleIllustrationTouchEnd = () => {
-    if (!touchStartX || !touchEndX || currentIllustrationImages.length <= 1) return;
-    const distance = touchStartX - touchEndX;
+    const start = touchStartXRef.current;
+    const end = touchEndXRef.current;
+    if (start === null || end === null || currentIllustrationImages.length <= 1) return;
+    const distance = start - end;
     if (distance > 45) {
       // Swiped Left -> Next
       setIllustrationSlideIndex((prev) => (prev + 1) % currentIllustrationImages.length);
@@ -297,8 +307,10 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
   };
 
   const handleZoomTouchEnd = () => {
-    if (!touchStartX || !touchEndX || zoomImageList.length <= 1) return;
-    const distance = touchStartX - touchEndX;
+    const start = touchStartXRef.current;
+    const end = touchEndXRef.current;
+    if (start === null || end === null || zoomImageList.length <= 1) return;
+    const distance = start - end;
     if (distance > 45) {
       handleZoomNext();
     } else if (distance < -45) {
@@ -395,7 +407,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                       {item.emoji} {item.name}
                     </span>
                     <span className="text-[9px] sm:text-[10px] font-mono opacity-90">
-                      {formatCurrency(item.priceUSD, currency)}
+                      {formatCurrency(getOptionPrice(item, currency), currency)}
                     </span>
                   </button>
                 ))}
@@ -415,18 +427,22 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                   }}
                   className="relative rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 group/slider shadow-md flex items-center justify-center touch-pan-y transition-all duration-300 ease-out max-w-full [--slider-max-h:340px] sm:[--slider-max-h:450px]"
                 >
-                  {/* Ambient Blurred Artwork Backdrop */}
+                  {/* Ambient Blurred Artwork Backdrop - lightweight GPU blur */}
                   <img
                     src={currentMangaItem.image}
                     alt=""
                     aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover blur-md opacity-25 scale-105 pointer-events-none will-change-transform"
                   />
 
                   {/* Main Foreground Artwork */}
                   <img
                     src={currentMangaItem.image}
                     alt={currentMangaItem.title}
+                    loading="lazy"
+                    decoding="async"
                     onLoad={(e) => handleImageLoad(currentMangaItem.image, e)}
                     className="relative z-10 w-full h-full object-contain select-none transition-transform duration-300 group-hover/slider:scale-[1.015] cursor-zoom-in drop-shadow-2xl"
                     onClick={() =>
@@ -527,7 +543,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 </div>
                 <div className="text-right">
                   <span className="text-xl sm:text-2xl font-extrabold font-mono text-amber-700 dark:text-amber-300">
-                    {formatCurrency(selectedMangaCat.priceUSD, currency)}
+                    {formatCurrency(getOptionPrice(selectedMangaCat, currency), currency)}
                   </span>
                   <span className="text-[10px] text-stone-500 font-mono block">
                     / panel
@@ -623,7 +639,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                       {scope.emoji} {scope.name.split(' ')[0]}
                     </span>
                     <span className="text-[9px] sm:text-[10px] font-mono opacity-90">
-                      {formatCurrency(scope.priceUSD, currency)}
+                      {formatCurrency(getOptionPrice(scope, currency), currency)}
                     </span>
                   </button>
                 ))}
@@ -643,18 +659,22 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                   }}
                   className="relative rounded-2xl overflow-hidden border-2 dark:border-[#38312b] border-[#e2d7c9] bg-stone-950 group/slider shadow-md flex items-center justify-center touch-pan-y transition-all duration-300 ease-out max-w-full [--slider-max-h:340px] sm:[--slider-max-h:450px]"
                 >
-                  {/* Ambient Blurred Artwork Backdrop */}
+                  {/* Ambient Blurred Artwork Backdrop - lightweight GPU blur */}
                   <img
                     src={currentIllustrationItem.image}
                     alt=""
                     aria-hidden="true"
-                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover blur-md opacity-25 scale-105 pointer-events-none will-change-transform"
                   />
 
                   {/* Main Foreground Artwork */}
                   <img
                     src={currentIllustrationItem.image}
                     alt={currentIllustrationItem.title}
+                    loading="lazy"
+                    decoding="async"
                     onLoad={(e) => handleImageLoad(currentIllustrationItem.image, e)}
                     className="relative z-10 w-full h-full object-contain select-none transition-transform duration-300 group-hover/slider:scale-[1.015] cursor-zoom-in drop-shadow-2xl"
                     onClick={() =>
@@ -767,7 +787,7 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
                 <div className="text-right">
                   <span className="text-xl sm:text-2xl font-extrabold font-mono text-amber-700 dark:text-amber-300">
                     {formatCurrency(
-                      selectedIllustrationScope.priceUSD,
+                      getOptionPrice(selectedIllustrationScope, currency),
                       currency
                     )}
                   </span>

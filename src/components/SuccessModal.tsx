@@ -27,7 +27,10 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
 • Service: ${order.tier.name}
 • Category/Scope: ${order.categoryOption?.name || 'Standard'}
 • Quantity: ${order.pageCount}
-• Estimated Total: ${formatCurrency(order.totalUSD, order.currency)}
+• Estimated Total: ${formatCurrency(
+  order.totalAmount ?? order.totalUSD,
+  order.currency
+)}
 • Turnaround: ~${order.estimatedDays}
 • Color/Mood Direction: ${order.colorMood || 'Not specified'}
 • Notes: ${order.notes || 'None'}`;
@@ -143,7 +146,10 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
                 {lang === 'ID' ? 'Total Estimasi' : 'Estimated Total'}
               </span>
               <span className="text-base sm:text-lg font-extrabold text-amber-700 dark:text-amber-300 font-mono">
-                {formatCurrency(order.totalUSD, order.currency)}
+                {formatCurrency(
+                  order.totalAmount ?? order.totalUSD,
+                  order.currency
+                )}
               </span>
             </div>
           </div>

@@ -35,6 +35,7 @@ export const mangaPanelCategories: CategoryOption[] = [
     id: 'full-panel',
     name: 'Full Panel',
     priceUSD: 25,
+    priceIDR: 380000,
     turnaroundDays: '1–2 days / page',
     description:
       'High-contrast, vibrant color grading for a complete manga panel. Includes background scenery, dynamic lighting, volumetric shadows, environmental mood, and colored sound effects.',
@@ -51,6 +52,7 @@ export const mangaPanelCategories: CategoryOption[] = [
     id: 'character-focused-panel',
     name: 'Character Focused Panel',
     priceUSD: 20,
+    priceIDR: 280000,
     turnaroundDays: '1–2 days',
     description:
       'Character-focused manga panel colorization. Emphasizes expressive facial rendering, detailed hair/clothing shading, rim lighting, and atmospheric focus.',
@@ -69,6 +71,7 @@ export const mangaPanelCategories: CategoryOption[] = [
     id: 'double-spread',
     name: 'Double Spread',
     priceUSD: 30,
+    priceIDR: 450000,
     turnaroundDays: '1–2 days',
     description:
       'A cinematic two-page spread colorization. Features complex perspective, detailed background scenery painting, dramatic lighting, and special effects.',
@@ -90,6 +93,7 @@ export const illustrationScopes: CategoryOption[] = [
     id: 'bust',
     name: 'Headshot / Bust',
     priceUSD: 20,
+    priceIDR: 280000,
     turnaroundDays: '1–2 days',
     description:
       'Detailed headshot or chest-up character illustration with clean lineart, vibrant shading, and expressive lighting.',
@@ -108,6 +112,7 @@ export const illustrationScopes: CategoryOption[] = [
     id: 'half-body',
     name: 'Half-Body (Waist-Up)',
     priceUSD: 25,
+    priceIDR: 380000,
     turnaroundDays: '1–2 days',
     description:
       'Waist-up character drawing featuring dynamic posture, detailed outfit texturing, lighting effects, and soft background depth.',
@@ -126,6 +131,7 @@ export const illustrationScopes: CategoryOption[] = [
     id: 'full-body',
     name: 'Full-Body Character',
     priceUSD: 30,
+    priceIDR: 400000,
     turnaroundDays: '1–2 days',
     description:
       'Complete head-to-toe character illustration with intricate costume detailing, props, weapon rendering, and atmospheric lighting.',
@@ -151,6 +157,7 @@ export const commissionTiers: MainTier[] = [
     tagline:
       'Manga panel colorization with atmospheric lighting & color grading.',
     basePriceUSD: 20,
+    basePriceIDR: 280000,
     turnaroundDays: '1–2 days',
     description:
       'Complete colorization for manga pages and panels. Choose your panel style: Full Panel, Character Focused Panel, or Double Spread.',
@@ -173,6 +180,7 @@ export const commissionTiers: MainTier[] = [
     tagline:
       'Full digital character artwork, original character drawings, and custom illustrations.',
     basePriceUSD: 20,
+    basePriceIDR: 280000,
     turnaroundDays: '1–2 days',
     description:
       'Custom character artwork drawn from sketch to final rendering. Select your scope: Headshot/Bust, Half-Body, or Full-Body.',
@@ -501,16 +509,44 @@ export const currencyConfigs: Record<CurrencyCode, CurrencyConfig> = {
   },
 };
 
+export function getOptionPrice(
+  option: CategoryOption,
+  currency: CurrencyCode = 'USD'
+): number {
+  if (currency === 'IDR' && option.priceIDR) {
+    return option.priceIDR;
+  }
+  return option.priceUSD;
+}
+
+export function getTierBasePrice(
+  tier: MainTier,
+  currency: CurrencyCode = 'USD'
+): number {
+  if (currency === 'IDR' && tier.basePriceIDR) {
+    return tier.basePriceIDR;
+  }
+  return tier.basePriceUSD;
+}
+
 export function formatCurrency(
-  amountUSD: number,
+  amount: number,
   currency: CurrencyCode = 'USD'
 ): string {
   const config = currencyConfigs[currency] || currencyConfigs.USD;
-  const converted = amountUSD * config.rateFromUSD;
   if (currency === 'IDR') {
-    // Round to the nearest Rp 5.000 for clean, round Indonesian pricing
+    // If already in IDR (>= 1000, e.g. 280000, 380000, 400000, 450000)
+    if (amount >= 1000) {
+      return `${config.symbol}${Math.round(amount).toLocaleString('id-ID')}`;
+    }
+    // Mapping for base tier prices passed as USD
+    if (amount === 20) return `${config.symbol}280.000`;
+    if (amount === 25) return `${config.symbol}380.000`;
+    if (amount === 30) return `${config.symbol}400.000`;
+
+    const converted = amount * 14000;
     const rounded = Math.round(converted / 5000) * 5000;
     return `${config.symbol}${rounded.toLocaleString('id-ID')}`;
   }
-  return `${config.symbol}${converted.toFixed(0)}`;
+  return `${config.symbol}${amount.toFixed(0)}`;
 }

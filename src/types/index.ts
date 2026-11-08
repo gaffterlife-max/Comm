@@ -31,6 +31,7 @@ export interface CategoryOption {
   id: string;
   name: string;
   priceUSD: number;
+  priceIDR?: number;
   turnaroundDays: string;
   description: string;
   deliverables: string[];
@@ -47,6 +48,7 @@ export interface MainTier {
   badge?: string;
   tagline: string;
   basePriceUSD: number;
+  basePriceIDR?: number;
   turnaroundDays: string;
   description: string;
   deliverables: string[];
@@ -99,6 +101,7 @@ export interface OrderInquiry {
   categoryOption: CategoryOption;
   pageCount: number;
   totalUSD: number;
+  totalAmount?: number;
   currency: CurrencyCode;
   clientName: string;
   clientHandle: string;

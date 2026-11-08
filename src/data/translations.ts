@@ -188,14 +188,14 @@ export const translations = {
     emailLabel: 'Alamat Email',
     emailPlaceholder: 'nama@contoh.com',
     projectTitleLabel: 'Judul Proyek atau Seri',
-    projectTitlePlaceholder: 'contoh: Astral Blade Chapter 3',
+    projectTitlePlaceholder: 'contoh: Jujutsu Kaisen/Gojo Chap 2',
     referenceLinksLabel:
       'Tautan Referensi (Google Drive, Imgur, Pinterest)',
     referenceLinksPlaceholder:
       'https://drive.google.com/... atau https://imgur.com/...',
     colorMoodLabel: 'Pengarahan Warna & Pencahayaan',
     colorMoodPlaceholder:
-      'contoh: Golden hour sunset, dark moody action dengan api biru, pastel daylight',
+      'contoh: Golden hour sunset, dark moody, etc',
     notesLabel: 'Catatan Tambahan atau Tenggat Waktu',
     notesPlaceholder:
       'Berikan instruksi khusus, detail kepribadian karakter, atau target tenggat waktu.',
