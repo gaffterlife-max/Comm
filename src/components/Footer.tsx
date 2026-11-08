@@ -29,8 +29,9 @@ export const Footer: React.FC<FooterProps> = ({ lang = 'EN' }) => {
                   <h3 className="text-base sm:text-lg font-bold text-white font-display">
                     {artistProfile.name}
                   </h3>
-                  <span className="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-semibold">
-                    {t.openForCommissions}
+                  <span className="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-semibold flex items-center gap-1">
+                    <span>{t.openForCommissions}</span>
+                    <span className="font-mono font-bold bg-amber-400 text-stone-950 px-1.5 py-0.2 rounded">7/7</span>
                   </span>
                 </div>
                 <p className="text-[11px] sm:text-xs text-amber-300/90 font-medium">

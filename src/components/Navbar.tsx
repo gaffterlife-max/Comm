@@ -44,7 +44,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           ·
         </span>
-        <span className="font-mono text-[10px] sm:text-[11px] bg-amber-400/20 px-2 py-0.5 rounded-md">
+        <span className="font-mono text-[10px] sm:text-[11px] bg-amber-400 text-stone-950 px-2 py-0.5 rounded-md font-bold shadow-xs">
+          🎯 Slot 7/7
+        </span>
+        <span
+          aria-hidden="true"
+          className="text-amber-700/40 dark:text-amber-300/30 hidden xs:inline"
+        >
+          ·
+        </span>
+        <span className="font-mono text-[10px] sm:text-[11px] bg-amber-400/20 px-2 py-0.5 rounded-md hidden xs:inline">
           USD ($) & IDR (Rp)
         </span>
         <span

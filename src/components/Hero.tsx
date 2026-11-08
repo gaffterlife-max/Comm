@@ -31,6 +31,9 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 rounded-full bg-amber-400/15 border border-amber-400/40 text-[11px] sm:text-xs font-bold text-amber-900 dark:text-amber-200 shadow-xs max-w-full">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
             <span className="truncate">{t.commissionsOpenBadge}</span>
+            <span className="px-2 py-0.5 rounded-md bg-amber-400 text-stone-950 font-mono text-[10px] sm:text-[11px] font-extrabold ml-0.5 shrink-0">
+              Slot 7/7
+            </span>
           </div>
 
           {/* Heading */}
@@ -45,6 +48,13 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Centered Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-[11px] sm:text-xs font-bold pt-0.5">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#3d332a] border-[#d8ccbe] shadow-xs">
+              <span className="text-amber-500 font-bold">🎯</span>
+              <span>
+                {lang === 'ID' ? 'Slot Komisi:' : 'Commission Slot:'}{' '}
+                <strong className="text-amber-600 dark:text-amber-300 font-mono">7/7</strong>
+              </span>
+            </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl dark:bg-[#25201c] bg-[#ede5db] border dark:border-[#3d332a] border-[#d8ccbe] shadow-xs">
               <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
               <span>

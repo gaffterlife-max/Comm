@@ -4,6 +4,8 @@ export const translations = {
   EN: {
     // Navbar
     commissionsOpen: 'Commissions are currently OPEN',
+    commissionSlot: 'Slot 7/7',
+    slotsAvailable: 'Slot 7/7 Available',
     ratesShownIn: 'Rates shown in',
     calculateYourRate: 'Calculate your rate',
     stylesAndRates: 'Styles & Rates',
@@ -127,6 +129,8 @@ export const translations = {
   ID: {
     // Navbar
     commissionsOpen: 'Komisi sedang DIBUKA',
+    commissionSlot: 'Slot 7/7',
+    slotsAvailable: 'Tersedia Slot 7/7',
     ratesShownIn: 'Harga dalam',
     calculateYourRate: 'Hitung estimasi harga',
     stylesAndRates: 'Gaya & Harga',
