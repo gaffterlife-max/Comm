@@ -132,7 +132,6 @@ export default function App() {
         onBookCommission={() => handleOpenCalculator()}
         operatorConfig={operatorConfig}
         onOpenOperator={() => setIsOperatorModalOpen(true)}
-        onLogoTripleClick={() => setIsOperatorModalOpen(true)}
         isOperatorActive={isOperatorActive}
       />
       <main>

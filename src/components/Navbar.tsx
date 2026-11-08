@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Lock, Menu, Moon, Sliders, Sparkles, Sun, X } from 'lucide-react';
 import { artistProfile } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
@@ -15,7 +15,6 @@ interface NavbarProps {
   onBookCommission: () => void;
   operatorConfig?: OperatorConfig;
   onOpenOperator?: () => void;
-  onLogoTripleClick?: () => void;
   isOperatorActive?: boolean;
 }
 
@@ -29,32 +28,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onBookCommission,
   operatorConfig,
   onOpenOperator,
-  onLogoTripleClick,
   isOperatorActive = false,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = getTranslation(lang);
-
-  const logoClickRef = useRef<{ count: number; timer: ReturnType<typeof setTimeout> | null }>({
-    count: 0,
-    timer: null,
-  });
-
-  const handleLogoClick = () => {
-    logoClickRef.current.count += 1;
-    if (logoClickRef.current.timer) clearTimeout(logoClickRef.current.timer);
-
-    if (logoClickRef.current.count >= 3) {
-      logoClickRef.current.count = 0;
-      if (onLogoTripleClick) {
-        onLogoTripleClick();
-      }
-    } else {
-      logoClickRef.current.timer = setTimeout(() => {
-        logoClickRef.current.count = 0;
-      }, 1500);
-    }
-  };
 
   const navLinks = [
     { label: t.stylesAndRates, href: '#tiers' },
@@ -127,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-2.5 sm:gap-3 shrink-0 group hover:opacity-90 transition-opacity min-w-0"
           aria-label="Home"
         >
-          <div className="relative shrink-0 cursor-pointer" onClick={handleLogoClick}>
+          <div className="relative shrink-0">
             <img
               src={artistProfile.logoImage}
               alt="Duck Logo"
