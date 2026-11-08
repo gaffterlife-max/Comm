@@ -76,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="h-8.5 w-8.5 sm:h-10 sm:w-10 object-contain transition-transform group-hover:scale-105 duration-200 rounded-xl"
             />
           </div>
-          <div className="flex flex-col min-w-0">
+          <div className="hidden sm:flex flex-col min-w-0">
             <span className="text-sm sm:text-base font-bold tracking-tight dark:text-amber-100 text-stone-900 font-display leading-tight truncate">
               {artistProfile.name}
             </span>
