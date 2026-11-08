@@ -120,12 +120,12 @@ const illustrationSamples: Record<string, SampleImage[]> = {
   bust: [
     {
       title: 'Isagi',
-      image: 'public/assets/images/1000074271.jpg',
+      image: '/assets/images/1000074271.jpg',
       aspectRatio: 3360 / 1822, // 1.844
     },
     {
       title: 'Kaneki',
-      image: 'public/assets/images/kneki.png',
+      image: '/assets/images/kneki.png',
       aspectRatio: 2532 / 3426, // 0.739
     },
   ],
@@ -137,7 +137,7 @@ const illustrationSamples: Record<string, SampleImage[]> = {
     },
     {
       title: 'Rin',
-      image: 'public/assets/images/rin fanart bust.jpg',
+      image: '/assets/images/rin fanart bust.jpg',
       aspectRatio: 4211 / 2988, // 1.409
     },
   ],
