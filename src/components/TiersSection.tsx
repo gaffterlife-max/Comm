@@ -35,94 +35,103 @@ const mangaSamples: Record<string, SampleImage[]> = {
   'full-panel': [
     {
       title: 'World Hater Majik',
-      image: 'public/assets/images/whm ichi the magic full panel.jpg',
+      image: '/assets/images/whm ichi the magic full panel.jpg',
     },
     {
       title: 'Hild',
-      image: 'public/assets/images/vinland saga full panel.jpg',
+      image: '/assets/images/vinland saga full panel.jpg',
     },
     {
       title: 'Julian',
-      image: 'public/assets/images/julian full panel.jpg',
+      image: '/assets/images/julian full panel.jpg',
     },
-   {
+    {
       title: 'Frieren',
-      image: 'public/assets/images/frieren full panel.jpg',
+      image: '/assets/images/frieren full panel.jpg',
     },
-  {
+    {
       title: 'Shidou',
-      image: 'public/assets/images/shidou ful panel.jpg',
+      image: '/assets/images/shidou ful panel.jpg',
     },
   ],
   'character-focused-panel': [
     {
       title: 'Teddy',
-      image: 'public/assets/images/teddy cfp1.jpg',
+      image: '/assets/images/teddy cfp1.jpg',
     },
     {
       title: 'Loki',
-      image: 'public/assets/images/loki cfp.jpg',
+      image: '/assets/images/loki cfp.jpg',
     },
     {
       title: 'Isagi',
-      image: 'public/assets/images/isagi yoichi cfp2.jpg',
+      image: '/assets/images/isagi yoichi cfp2.jpg',
     },
     {
       title: 'Teddy',
-      image: 'public/assets/images/teddy cfp2.jpg',
+      image: '/assets/images/teddy cfp2.jpg',
     },
     {
       title: 'Isagi',
-      image: 'public/assets/images/isagi yoichi cfp3.jpg',
+      image: '/assets/images/isagi yoichi cfp3.jpg',
     },
-   
-
   ],
   'double-spread': [
     {
       title: 'Isagi Vs Hugo',
-      image: 'public/assets/images/hugo vs isagi spread.jpg',
+      image: '/assets/images/hugo vs isagi spread.jpg',
     },
     {
       title: 'Sun Ken Rock',
-      image: 'public/assets/images/sun ken rock spread.jpg',
+      image: '/assets/images/sun ken rock spread.jpg',
     },
     {
       title: 'Asta the Wizard King',
-      image: 'public/assets/images/asta spread.jpg',
+      image: '/assets/images/asta spread.jpg',
     },
     {
       title: 'Nagi',
-      image: 'public/assets/images/Nuts1.png',
+      image: '/assets/images/Nuts1.png',
     },
     {
       title: 'Rin Goal',
-      image: 'public/assets/images/RINchan.jpg',
+      image: '/assets/images/RINchan.jpg',
     },
-
   ],
 };
 
 const illustrationSamples: Record<string, SampleImage[]> = {
   bust: [
     {
-      title: 'Astral Seraph · Expressive Headshot Icon',
-      image: '/assets/images/character_illustration_showcase_1793799152713.jpg',
+      title: 'NG11 Fanart · Bust',
+      image: '/assets/images/ng11 fanart bust.jpg',
     },
     {
-      title: 'Gaffter Mascot Avatar · Profile Icon',
-      image: '/assets/aistudio/wmm_newss_ccb81ada.png',
+      title: 'Rin Fanart · Bust',
+      image: '/assets/images/rin fanart bust.jpg',
+    },
+    {
+      title: 'Teddy Fanart · Headshot',
+      image: '/assets/images/teddy fanart headshot.jpg',
     },
   ],
   'half-body': [
     {
-      title: 'Celestial Guardian · Half-Body Dynamic Stance',
-      image: '/assets/images/character_illustration_showcase_1793799152713.jpg',
+      title: 'Hugo Fanart · Half-Body',
+      image: '/assets/images/hugo fanart.jpg',
+    },
+    {
+      title: 'Isagi Yoichi Fanart · Half-Body',
+      image: '/assets/images/isagi yoichi fanart1.jpg',
     },
   ],
   'full-body': [
     {
-      title: 'Seraphim of the Astral Dawn · Full-Body Showcase',
+      title: 'Teddy Fanart · Full-Body',
+      image: '/assets/images/teddy fanart full body.jpg',
+    },
+    {
+      title: 'Celestial Seraph · Full-Body Showcase',
       image: '/assets/images/character_illustration_showcase_1793799152713.jpg',
     },
   ],
