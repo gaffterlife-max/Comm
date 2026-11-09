@@ -54,7 +54,19 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
 
     const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${body}`;
     window.location.href = mailtoUrl;
-    onClose();
+  };
+
+  const handleSendGmailWeb = () => {
+    const recipient = artistProfile.socials.email; // gaffterlife@gmail.com
+    const subject = encodeURIComponent(
+      `Commission Inquiry - ${order.tier.name} [Ref #${order.orderId}]`
+    );
+    const body = encodeURIComponent(
+      `Hi gaffterduck,\n\nI would like to order a commission with the following details:\n\n${summaryText}\n\nLooking forward to hearing from you!`
+    );
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`;
+    window.open(gmailUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -212,51 +224,71 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
         </div>
 
         {/* Actions Button Bar */}
-        <div className="flex flex-col sm:flex-row items-stretch gap-2.5 pt-2">
-          {/* Main Direct Email Action Button */}
-          <button
-            type="button"
-            onClick={handleSendEmail}
-            className="flex-1 min-h-[48px] py-3.5 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-500/20 active:scale-98"
-          >
-            <Mail className="w-4 h-4 fill-stone-950 shrink-0" />
-            <span className="text-center">
-              {lang === 'ID'
-                ? 'Kirim Email ke Artist (gaffterlife@gmail.com)'
-                : 'Send Email to Artist (gaffterlife@gmail.com)'}
-            </span>
-          </button>
+        <div className="space-y-2 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {/* Direct Gmail Web Launcher (Desktop) */}
+            <button
+              type="button"
+              onClick={handleSendGmailWeb}
+              className="py-3 px-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-500/20 active:scale-98 min-h-[46px]"
+            >
+              <img
+                src="/assets/aistudio/image_553bb6fd.png"
+                alt="Gmail (for desktop)"
+                className="w-4.5 h-4.5 object-contain shrink-0"
+              />
+              <span className="truncate">
+                (for desktop)
+              </span>
+            </button>
 
-          {/* Copy Summary Button */}
-          <button
-            type="button"
-            onClick={copySummary}
-            className="min-h-[46px] py-3 px-4 rounded-2xl dark:bg-[#2a2420] bg-stone-100 hover:dark:bg-[#332b27] hover:bg-stone-200 text-stone-900 dark:text-stone-100 text-xs font-semibold transition-all flex items-center justify-center gap-2 border dark:border-[#3d332d] border-stone-300 cursor-pointer active:scale-98"
-            title="Copy inquiry summary text"
-          >
-            {copied ? (
-              <>
-                <Check className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span className="text-emerald-500 font-bold">
-                  {lang === 'ID' ? 'Tersalin!' : 'Copied!'}
-                </span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4 text-amber-500 shrink-0" />
-                <span>{lang === 'ID' ? 'Salin Ringkasan' : 'Copy Summary'}</span>
-              </>
-            )}
-          </button>
+            {/* App Mailto Launcher (Mobile / General App) */}
+            <button
+              type="button"
+              onClick={handleSendEmail}
+              className="py-3 px-3.5 rounded-2xl dark:bg-[#2e2620] bg-stone-100 hover:dark:bg-[#382f28] hover:bg-stone-200 dark:text-amber-200 text-stone-900 font-bold text-xs transition-all flex items-center justify-center gap-2 border dark:border-[#3e342c] border-stone-300 cursor-pointer active:scale-98 min-h-[46px]"
+              title="Gmail App"
+            >
+              <img
+                src="/assets/aistudio/image_553bb6fd.png"
+                alt="Gmail App"
+                className="w-5 h-5 object-contain shrink-0"
+              />
+            </button>
+          </div>
 
-          {/* Done / Close Button */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="min-h-[46px] py-3 px-4 rounded-2xl dark:bg-[#25201c] bg-[#ede5db] hover:bg-[#e4dbcf] dark:hover:bg-[#302a25] dark:text-stone-200 text-stone-800 font-semibold text-xs border dark:border-[#38312b] border-[#dfd4c7] transition-all cursor-pointer active:scale-98"
-          >
-            {lang === 'ID' ? 'Selesai' : 'Done'}
-          </button>
+          <div className="grid grid-cols-2 gap-2">
+            {/* Copy Summary Button */}
+            <button
+              type="button"
+              onClick={copySummary}
+              className="py-2.5 px-3 rounded-xl dark:bg-[#25201c] bg-[#f2eae0] hover:dark:bg-[#2e2722] hover:bg-[#e8decb] text-stone-800 dark:text-stone-200 text-xs font-semibold transition-all flex items-center justify-center gap-1.5 border dark:border-[#38312b] border-[#dfd4c7] cursor-pointer active:scale-98"
+              title="Copy inquiry summary text"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <span className="text-emerald-500 font-bold">
+                    {lang === 'ID' ? 'Tersalin!' : 'Copied!'}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <span>{lang === 'ID' ? 'Salin Brief' : 'Copy Brief'}</span>
+                </>
+              )}
+            </button>
+
+            {/* Done / Close Button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="py-2.5 px-3 rounded-xl dark:bg-[#25201c] bg-[#f2eae0] hover:dark:bg-[#2e2722] hover:bg-[#e8decb] text-stone-800 dark:text-stone-200 font-semibold text-xs border dark:border-[#38312b] border-[#dfd4c7] transition-all cursor-pointer active:scale-98"
+            >
+              {lang === 'ID' ? 'Selesai' : 'Done'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
