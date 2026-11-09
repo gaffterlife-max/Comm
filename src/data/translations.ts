@@ -62,14 +62,14 @@ export const translations = {
     step3Title: 'Project Brief & Contact Information',
     yourName: 'Your Name / Pseudonym',
     namePlaceholder: 'e.g. Alex Vance',
-    handleLabel: 'Discord or Twitter/X Handle',
+    handleLabel: 'Discord, Instagram or Twitter/X Handle',
     handlePlaceholder: 'e.g. @username or user#1234',
     emailLabel: 'Email Address',
     emailPlaceholder: 'name@example.com',
     projectTitleLabel: 'Project or Series Title',
-    projectTitlePlaceholder: 'e.g. Astral Blade Chapter 3',
+    projectTitlePlaceholder: 'e.g. Jujutsu Kaisen/Gojo Chap 2',
     referenceLinksLabel:
-      'Reference Links (Google Drive, Imgur, Pinterest, Toyhouse)',
+      'Reference Links (Google Drive, Pinterest,)',
     referenceLinksPlaceholder:
       'https://drive.google.com/... or https://imgur.com/...',
     colorMoodLabel: 'Color & Lighting Direction',
