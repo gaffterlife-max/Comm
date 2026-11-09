@@ -517,12 +517,12 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
                 {t.referenceLinksLabel}
               </label>
-              <input
-                type="text"
+              <textarea
+                rows={2}
                 value={referenceUrls}
                 onChange={(e) => setReferenceUrls(e.target.value)}
                 placeholder={t.referenceLinksPlaceholder}
-                className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
+                className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors resize-y min-h-[64px]"
               />
             </div>
 
@@ -530,12 +530,12 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
               <label className="block text-xs font-semibold dark:text-stone-200 text-stone-800 mb-1">
                 {t.colorMoodLabel}
               </label>
-              <input
-                type="text"
+              <textarea
+                rows={2}
                 value={colorMood}
                 onChange={(e) => setColorMood(e.target.value)}
                 placeholder={t.colorMoodPlaceholder}
-                className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors"
+                className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors resize-y min-h-[64px]"
               />
             </div>
 
@@ -548,7 +548,7 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder={t.notesPlaceholder}
-                className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors resize-none"
+                className="w-full dark:bg-[#1a1715] bg-[#faf7f2] border dark:border-[#38312b] border-[#eee5d8] rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base sm:text-xs dark:text-white text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-400 transition-colors resize-y min-h-[80px]"
               />
             </div>
 

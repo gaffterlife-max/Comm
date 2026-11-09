@@ -108,7 +108,7 @@ const mangaSamples: Record<string, SampleImage[]> = {
     },
     {
       title: 'Nagi',
-      image: '/assets/images/Nuts1.png',
+      image: '/assets/images/Nuts1.jpg',
       aspectRatio: 2950 / 2197, // 1.343
     },
     {
@@ -212,6 +212,52 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
     setIllustrationSlideIndex(0);
   }, [selectedIllustrationScopeId]);
 
+  const currentMangaImages = mangaSamples[selectedMangaCatId] || [];
+  const currentIllustrationImages =
+    illustrationSamples[selectedIllustrationScopeId] || [];
+
+  // Intelligent preloading: warm up adjacent images in active categories so slide navigation is instant
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const preloadUrls: string[] = [];
+
+    if (currentMangaImages.length > 1) {
+      const nextManga =
+        currentMangaImages[(mangaSlideIndex + 1) % currentMangaImages.length]?.image;
+      const prevManga =
+        currentMangaImages[
+          (mangaSlideIndex - 1 + currentMangaImages.length) %
+            currentMangaImages.length
+        ]?.image;
+      if (nextManga) preloadUrls.push(nextManga);
+      if (prevManga) preloadUrls.push(prevManga);
+    }
+
+    if (currentIllustrationImages.length > 1) {
+      const nextIll =
+        currentIllustrationImages[
+          (illustrationSlideIndex + 1) % currentIllustrationImages.length
+        ]?.image;
+      const prevIll =
+        currentIllustrationImages[
+          (illustrationSlideIndex - 1 + currentIllustrationImages.length) %
+            currentIllustrationImages.length
+        ]?.image;
+      if (nextIll) preloadUrls.push(nextIll);
+      if (prevIll) preloadUrls.push(prevIll);
+    }
+
+    preloadUrls.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [
+    mangaSlideIndex,
+    illustrationSlideIndex,
+    currentMangaImages,
+    currentIllustrationImages,
+  ]);
+
   const selectedMangaCat =
     mangaPanelCategories.find((c) => c.id === selectedMangaCatId) ||
     mangaPanelCategories[0];
@@ -225,10 +271,6 @@ export const TiersSection: React.FC<TiersSectionProps> = ({
   const illustrationTier =
     commissionTiers.find((t) => t.id === 'illustration') ||
     commissionTiers[1];
-
-  const currentMangaImages = mangaSamples[selectedMangaCatId] || [];
-  const currentIllustrationImages =
-    illustrationSamples[selectedIllustrationScopeId] || [];
 
   const currentMangaItem =
     currentMangaImages[mangaSlideIndex] || currentMangaImages[0];

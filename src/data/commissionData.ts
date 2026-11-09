@@ -46,7 +46,7 @@ export const mangaPanelCategories: CategoryOption[] = [
     ],
     recommendedFor: 'Full manga pages, action scenes, and scenic panels',
     emoji: '📖',
-    sampleImage: '/assets/images/10000954181.png',
+    sampleImage: '/assets/images/10000954181.jpg',
   },
   {
     id: 'character-focused-panel',
@@ -65,7 +65,7 @@ export const mangaPanelCategories: CategoryOption[] = [
     recommendedFor:
       'Character portraits in manga, emotional close-ups, reaction panels',
     emoji: '👤',
-    sampleImage: '/assets/images/10000954181.png',
+    sampleImage: '/assets/images/10000954181.jpg',
   },
   {
     id: 'double-spread',
@@ -169,7 +169,7 @@ export const commissionTiers: MainTier[] = [
     revisions: '5 revision passes across milestones',
     recommendedFor:
       'Youtube thumbnail, content across all platform, and Personal project',
-    sampleImage: '/assets/images/10000954181.png',
+    sampleImage: '/assets/images/10000954181.jpg',
   },
   {
     id: 'illustration',
