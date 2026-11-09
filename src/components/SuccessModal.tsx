@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Check, CircleCheck, Copy, Mail, Send, X } from 'lucide-react';
 import { artistProfile, formatCurrency } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
@@ -17,6 +17,13 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const t = getTranslation(lang);
+
+  const isMobile = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+  }, []);
 
   if (!order) return null;
 
@@ -224,38 +231,41 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
         </div>
 
         {/* Actions Button Bar */}
-        <div className="space-y-2 pt-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {/* Direct Gmail Web Launcher (Desktop) */}
-            <button
-              type="button"
-              onClick={handleSendGmailWeb}
-              className="py-3 px-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-500/20 active:scale-98 min-h-[46px]"
-            >
-              <img
-                src="/assets/aistudio/image_553bb6fd.png"
-                alt="Gmail (for desktop)"
-                className="w-4.5 h-4.5 object-contain shrink-0"
-              />
-              <span className="truncate">
-                (for desktop)
-              </span>
-            </button>
-
-            {/* App Mailto Launcher (Mobile / General App) */}
+        <div className="space-y-2.5 pt-2">
+          {/* Single Tailored Primary Email Action Button */}
+          {isMobile ? (
             <button
               type="button"
               onClick={handleSendEmail}
-              className="py-3 px-3.5 rounded-2xl dark:bg-[#2e2620] bg-stone-100 hover:dark:bg-[#382f28] hover:bg-stone-200 dark:text-amber-200 text-stone-900 font-bold text-xs transition-all flex items-center justify-center gap-2 border dark:border-[#3e342c] border-stone-300 cursor-pointer active:scale-98 min-h-[46px]"
-              title="Gmail App"
+              className="w-full py-3.5 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer border border-amber-500/20 active:scale-98 min-h-[48px]"
             >
               <img
                 src="/assets/aistudio/image_553bb6fd.png"
-                alt="Gmail App"
+                alt="Gmail"
                 className="w-5 h-5 object-contain shrink-0"
               />
+              <span>
+                {lang === 'ID' ? 'Kirim via Gmail App' : 'Send via Gmail App'}
+              </span>
             </button>
-          </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleSendGmailWeb}
+              className="w-full py-3.5 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer border border-amber-500/20 active:scale-98 min-h-[48px]"
+            >
+              <img
+                src="/assets/aistudio/image_553bb6fd.png"
+                alt="Gmail"
+                className="w-5 h-5 object-contain shrink-0"
+              />
+              <span>
+                {lang === 'ID'
+                  ? 'Kirim via Gmail Web'
+                  : 'Send via Gmail Web'}
+              </span>
+            </button>
+          )}
 
           <div className="grid grid-cols-2 gap-2">
             {/* Copy Summary Button */}
