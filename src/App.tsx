@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { CalculatorSection } from './components/CalculatorSection';
 import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
@@ -115,76 +116,79 @@ export default function App() {
   };
 
   return (
-    <div
-      className={`min-h-screen ${
-        isDark
-          ? 'dark bg-[#181614] text-[#f5efe6] bg-warm-dots-dark'
-          : 'bg-[#faf7f2] text-stone-900 bg-warm-dots-light'
-      } transition-colors duration-200 pb-28 lg:pb-0 font-sans overflow-x-hidden`}
-    >
-      <Navbar
-        currency={currency}
-        onCurrencyChange={handleCurrencyChange}
-        lang={lang}
-        onLanguageChange={handleLanguageChange}
-        isDark={isDark}
-        onToggleTheme={toggleTheme}
-        onBookCommission={() => handleOpenCalculator()}
-        operatorConfig={operatorConfig}
-        onOpenOperator={() => setIsOperatorModalOpen(true)}
-        isOperatorActive={isOperatorActive}
-      />
-      <main>
-        <Hero
+    <>
+      <div
+        className={`min-h-screen ${
+          isDark
+            ? 'dark bg-[#181614] text-[#f5efe6] bg-warm-dots-dark'
+            : 'bg-[#faf7f2] text-stone-900 bg-warm-dots-light'
+        } transition-colors duration-200 pb-28 lg:pb-0 font-sans overflow-x-hidden`}
+      >
+        <Navbar
+          currency={currency}
+          onCurrencyChange={handleCurrencyChange}
+          lang={lang}
+          onLanguageChange={handleLanguageChange}
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+          onBookCommission={() => handleOpenCalculator()}
+          operatorConfig={operatorConfig}
+          onOpenOperator={() => setIsOperatorModalOpen(true)}
+          isOperatorActive={isOperatorActive}
+        />
+        <main>
+          <Hero
+            currency={currency}
+            lang={lang}
+            onOpenCalculator={() => handleOpenCalculator()}
+            onViewTiers={() => {
+              const el = document.getElementById('tiers');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            operatorConfig={operatorConfig}
+          />
+          <TiersSection
+            currency={currency}
+            lang={lang}
+            onSelectTier={(tierId) => setSelectedTierId(tierId)}
+            operatorConfig={operatorConfig}
+          />
+          <CalculatorSection
+            currency={currency}
+            lang={lang}
+            selectedTierId={selectedTierId}
+            onSelectTier={setSelectedTierId}
+            onSubmitSuccess={(order) => setOrderModal(order)}
+            operatorConfig={operatorConfig}
+          />
+          <WorkflowTermsSection lang={lang} />
+        </main>
+        <Footer
+          lang={lang}
+          onOpenOperator={() => setIsOperatorModalOpen(true)}
+          isOperatorActive={isOperatorActive}
+        />
+        <MobileBottomBar
           currency={currency}
           lang={lang}
           onOpenCalculator={() => handleOpenCalculator()}
-          onViewTiers={() => {
-            const el = document.getElementById('tiers');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          operatorConfig={operatorConfig}
         />
-        <TiersSection
-          currency={currency}
+        <ResetHomeButton />
+        <SuccessModal
+          order={orderModal}
           lang={lang}
-          onSelectTier={(tierId) => setSelectedTierId(tierId)}
-          operatorConfig={operatorConfig}
+          onClose={() => setOrderModal(null)}
         />
-        <CalculatorSection
-          currency={currency}
+        <OperatorModal
+          isOpen={isOperatorModalOpen}
+          onClose={() => setIsOperatorModalOpen(false)}
+          config={operatorConfig}
+          onSaveConfig={handleSaveOperatorConfig}
           lang={lang}
-          selectedTierId={selectedTierId}
-          onSelectTier={setSelectedTierId}
-          onSubmitSuccess={(order) => setOrderModal(order)}
-          operatorConfig={operatorConfig}
+          currency={currency}
         />
-        <WorkflowTermsSection lang={lang} />
-      </main>
-      <Footer
-        lang={lang}
-        onOpenOperator={() => setIsOperatorModalOpen(true)}
-        isOperatorActive={isOperatorActive}
-      />
-      <MobileBottomBar
-        currency={currency}
-        lang={lang}
-        onOpenCalculator={() => handleOpenCalculator()}
-      />
-      <ResetHomeButton />
-      <SuccessModal
-        order={orderModal}
-        lang={lang}
-        onClose={() => setOrderModal(null)}
-      />
-      <OperatorModal
-        isOpen={isOperatorModalOpen}
-        onClose={() => setIsOperatorModalOpen(false)}
-        config={operatorConfig}
-        onSaveConfig={handleSaveOperatorConfig}
-        lang={lang}
-        currency={currency}
-      />
-    </div>
+      </div>
+      <Analytics />
+    </>
   );
 }
