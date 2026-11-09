@@ -235,12 +235,6 @@ export const CalculatorSection: React.FC<CalculatorSectionProps> = ({
       }),
     };
 
-    const subject = encodeURIComponent(
-      `Commission Inquiry [${newOrder.orderId}] - ${currentTier.name} (${currentOption.name})`
-    );
-    const body = encodeURIComponent(generateBriefText());
-
-    window.location.href = `mailto:gaffterlife@gmail.com?subject=${subject}&body=${body}`;
     onSubmitSuccess(newOrder);
   };
 
