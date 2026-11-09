@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Lock, Menu, Moon, Sliders, Sparkles, Sun, X } from 'lucide-react';
 import { artistProfile } from '../data/commissionData';
 import { getTranslation } from '../data/translations';
@@ -31,7 +31,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   isOperatorActive = false,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const t = getTranslation(lang);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 15);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { label: t.stylesAndRates, href: '#tiers' },
@@ -40,7 +50,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md dark:bg-[#1a1715]/95 bg-[#faf7f2]/95 border-b dark:border-[#332c27] border-[#e2d7c9] transition-colors">
+    <header
+      className={`sticky top-0 z-40 w-full backdrop-blur-md dark:bg-[#1a1715]/95 bg-[#faf7f2]/95 border-b dark:border-[#332c27] border-[#e2d7c9] transition-all duration-200 ${
+        isScrolled
+          ? 'shadow-lg shadow-black/15 dark:shadow-black/50'
+          : 'shadow-none'
+      }`}
+    >
       {/* Top Open Status Ticker */}
       <div className="dark:bg-[#26211d] bg-[#f2eae0] border-b dark:border-[#38312b] border-[#e2d7c9] px-2 sm:px-4 py-1 text-center text-[11px] sm:text-xs dark:text-amber-200 text-stone-800 font-medium flex items-center justify-center gap-1.5 sm:gap-2">
         <span

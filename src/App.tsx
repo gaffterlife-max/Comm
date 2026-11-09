@@ -120,7 +120,7 @@ export default function App() {
         isDark
           ? 'dark bg-[#181614] text-[#f5efe6] bg-warm-dots-dark'
           : 'bg-[#faf7f2] text-stone-900 bg-warm-dots-light'
-      } transition-colors duration-200 pb-28 lg:pb-0 font-sans overflow-x-hidden`}
+      } transition-colors duration-200 pb-28 lg:pb-0 font-sans overflow-x-clip`}
     >
       <Navbar
         currency={currency}
