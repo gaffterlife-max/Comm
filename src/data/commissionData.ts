@@ -84,7 +84,7 @@ export const mangaPanelCategories: CategoryOption[] = [
     recommendedFor:
       'Climax scenes, double-page spreads, key chapter highlights',
     emoji: '🌟',
-    sampleImage: '/assets/images/manga_cover_spread_1793799153733.jpg',
+    sampleImage: '/assets/images/hugo vs isagi spread.jpg',
   },
 ];
 
